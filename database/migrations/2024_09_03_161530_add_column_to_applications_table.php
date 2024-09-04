@@ -15,6 +15,7 @@ return new class extends Migration
             //
             $table->foreignId('job_id')->constrained('newjobs','job_id')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade')->onUpdate('cascade');
+            
         });
     }
 
