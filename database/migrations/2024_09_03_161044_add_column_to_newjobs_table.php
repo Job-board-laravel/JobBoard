@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('newjobs', function (Blueprint $table) {
             //
-            $table->foreignId('employer_id')->constrained('employers','employer_id')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->constrained('users','user_id')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('category_id')->constrained('categories','category_id')->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -25,8 +25,8 @@ return new class extends Migration
     {
         Schema::table('newjobs', function (Blueprint $table) {
             //
-            $table->dropForeign('newjobs_employer_id_foreign');
-            $table->dropColumn('employer_id');
+            $table->dropForeign('newjobs_user_id_foreign');
+            $table->dropColumn('user_id');
             $table->dropForeign('newjobs_category_id_foreign');
             $table->dropColumn('category_id');
         });

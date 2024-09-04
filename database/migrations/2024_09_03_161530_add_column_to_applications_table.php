@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('applications', function (Blueprint $table) {
             //
             $table->foreignId('job_id')->constrained('newjobs','job_id')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('candidate_id')->constrained('candidates', 'candidate_id')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->constrained('users', 'user_id')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -27,8 +27,8 @@ return new class extends Migration
             //
             $table->dropForeign('applications_job_id_foreign');
             $table->dropColumn('job_id');
-            $table->dropForeign('applications_candidate_id_foreign');
-            $table->dropColumn('candidate_id');
+            $table->dropForeign('applications_user_id_foreign');
+            $table->dropColumn('user_id');
         });
     }
 };

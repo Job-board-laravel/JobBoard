@@ -27,7 +27,7 @@ return new class extends Migration
             //
             $table->dropForeign('comments_job_id_foreign');
             $table->dropColumn('job_id');
-            $table->dropForeign('comments_candidate_id_foreign');
+            $table->dropForeign('comments_user_id_foreign');
             $table->dropColumn('user_id');
         });
     }

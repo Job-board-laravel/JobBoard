@@ -15,7 +15,11 @@ return new class extends Migration
             $table->bigIncrements('job_id');
             $table->string('title');
             $table->text('description');
+            $table->text('requirement');
+            $table->text('benefit');
             $table->string('location');
+            $table->string('contact_info')->nullable();
+            $table->string('logo')->nullable();
             $table->string('technologies'); // Comma separated or JSON
             $table->enum('work_type', ['remote', 'onsite', 'hybrid']);
             $table->decimal('salary_range')->nullable();
