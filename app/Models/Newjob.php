@@ -11,6 +11,23 @@ use App\Models\Application;
 class Newjob extends Model
 {
     use HasFactory;
+
+    protected $fillable = [ 
+        'title', 
+        'description',
+         'requirement',
+         'benefit', 
+        'location',
+         'contact_info',
+         'logo', 
+        'technologies',
+         'work_type',
+         'salary_range',
+         'application_deadline', 
+        'user_id',
+         'category_id',
+        ];
+
     public function EmployeeCreateJob(){
         return $this->belongsTo(User::class);
     }

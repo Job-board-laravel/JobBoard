@@ -8,6 +8,9 @@ use App\Models\Newjob;
 
 class Categorie extends Model
 {
+    protected $fillable = [
+        'category_name'
+    ];
     use HasFactory;
     public function CategoryJobs()
     {

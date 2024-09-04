@@ -10,7 +10,12 @@ use App\Models\Newjob;
 class Comment extends Model
 {
     use HasFactory;
-
+    protected $fillable = [ 
+        'content',
+         'job_id', 
+         'user_id'
+    ];
+   
     public function UserCreateComment(){
         return $this->belongsTo(User::class);
     }
@@ -18,6 +23,7 @@ class Comment extends Model
     public function JobComment(){
         return $this->belongsTo(Newjob::class);
     }
+
 
     
 }
