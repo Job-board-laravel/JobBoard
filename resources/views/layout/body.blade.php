@@ -24,11 +24,14 @@
                     </li>
                 </ul>
             </div>
-        </div>  
+        </div>
     </nav>
 
     <div class="container mt-5">
         @yield('content')
+    </div>
+    <div class="container mt-5">
+        @yield('contentCandidate')
     </div>
 
     <!-- Bootstrap JS -->

@@ -48,8 +48,8 @@ class NewjobController extends Controller
 
         // Handle the image upload
         if ($request->hasFile('logo')) {
-            $imageName = time() . '.' . $request->logo->extension();
-            $request->logo->storeAs('public/images', $imageName);
+            $image = request()->file("logo");
+            $imageName = $image->store("",'logo_Employer');
         } else {
             $imageName = null;
         }
@@ -57,11 +57,12 @@ class NewjobController extends Controller
         $categoryId = 1 ;
 
         // Save the job with the image name
-        Newjob::create(array_merge(
+        $ss = Newjob::create(array_merge(
             $request->all(),
             ['logo' => $imageName , 'user_id' => $userId , 'category_id' => $categoryId]
         ));
-
+        // dd($ss);
+        // dd($request);
         // Redirect back to home
         return redirect()->route('employer.index')->with('success', 'Job created successfully');
     }

@@ -28,7 +28,7 @@
                     <td>{{ $job->work_type }}</td>
                     <td>
                         @if ($job->logo)
-                            <img src="{{ asset('storage/images/' . $job->logo) }}" alt="{{ $job->title }} Logo" style="width: 100px;">
+                            <img src="{{ asset('images/LogoEmployers/'.$job->logo)}}" alt="{{ $job->title }} Logo" style="width: 100px;">
                         @else
                             No Image
                         @endif
@@ -43,7 +43,7 @@
                         <button type="submit" class="btn btn-danger btn-sm" title="Delete Job" onclick="return confirm('Are you sure you want to delete this job?')">Delete</button>
                         </form>
                     </td>
-                  
+
                 </tr>
             @empty
                 <tr>
