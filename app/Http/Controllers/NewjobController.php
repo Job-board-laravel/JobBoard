@@ -31,7 +31,7 @@ class NewjobController extends Controller
     {
     // Fetch all categories from the database
     $categories = \App\Models\Categorie::all();
-    
+
     // Pass categories to the view
     return view('employer.create', compact('categories'));
     }
@@ -40,7 +40,7 @@ class NewjobController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
+    {
     $request->validate([
         'title' => 'required|string|max:255',
         'description' => 'required',
@@ -55,7 +55,6 @@ class NewjobController extends Controller
         'category_id' => 'required|exists:categories,category_id',
     ]);
 
-<<<<<<< HEAD
         // Handle the image upload
         if ($request->hasFile('logo')) {
             $image = request()->file("logo");
@@ -75,17 +74,9 @@ class NewjobController extends Controller
         // dd($request);
         // Redirect back to home
         return redirect()->route('employer.index')->with('success', 'Job created successfully');
-=======
-    // Handle image upload
-    if ($request->hasFile('logo')) {
-        $imageName = time() . '.' . $request->logo->extension();
-        $request->logo->storeAs('public/images', $imageName);
-    } else {
-        $imageName = null;
->>>>>>> 300e6edb798ec861c3450f165113844885f7a68d
-    }
 
-    $userId = 1; 
+
+    $userId = 1;
 
     Newjob::create(array_merge(
         $request->all(),
@@ -99,13 +90,13 @@ class NewjobController extends Controller
      * Display the specified resource.
      */
     public function show($job_id)
-{
+    {
     // Find the job by its job_id, including the related category
     $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
-    
+
     // Pass the job details to the view
     return view('employer.show', compact('job'));
-}
+    }
 
 
     /**
@@ -167,7 +158,7 @@ class NewjobController extends Controller
 
     // Redirect or return response
     return redirect()->route('employer.show', $job_id)->with('success', 'Job updated successfully');
-}
+    }
     /**
      * Remove the specified resource from storage.
      */
