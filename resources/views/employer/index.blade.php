@@ -35,9 +35,9 @@
                     </td>
                     <td>{{ $job->stutas }}</td>
                     <td>
-                        <a href="{{ route('employer.show', 'job' ) }}" class="btn btn-info btn-sm" title="View Job">View</a>
-                        <a href="{{ route('employer.edit', 'job') }}" class="btn btn-warning btn-sm" title="Edit Job">Edit</a>
-                        <form action="{{ route('employer.destroy', 'job') }}" method="POST" style="display:inline;">
+                    <a href="{{ route('employer.show', $job->job_id) }}" class="btn btn-info btn-sm" title="View Job">View</a>
+                    <a href="{{ route('employer.edit', $job->job_id) }}" class="btn btn-warning btn-sm">Edit Job</a>
+                    <form action="{{ route('employer.destroy', 'job') }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger btn-sm" title="Delete Job" onclick="return confirm('Are you sure you want to delete this job?')">Delete</button>
