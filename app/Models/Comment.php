@@ -10,6 +10,8 @@ use App\Models\Newjob;
 class Comment extends Model
 {
     use HasFactory;
+    protected $table = 'comments';
+    protected $primaryKey = 'comment_id';
     protected $fillable = [
         'content',
          'job_id',

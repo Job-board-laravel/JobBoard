@@ -11,6 +11,9 @@ class Application extends Model
 {
     use HasFactory;
 
+    protected $table = 'applications';
+    protected $primaryKey = 'application_id';
+
     protected $fillable = [
         'cover_letter',
         'status',
@@ -26,5 +29,5 @@ class Application extends Model
     public function CandidateFillApp(){
         return $this->belongsTo(User::class , 'user_id', 'user_id');
     }
-    
+
 }
