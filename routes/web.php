@@ -10,7 +10,6 @@ Route::get('/', function () {
 
 // routers for page employer
 Route::resource('employer', NewjobController::class);
+Route::resource('candidate', NewjobController::class);
 
-Route::get('/employer/{employer}/edit', [NewjobController::class, 'edit'])->name('employer.edit');
-Route::put('/employer/{job_id}', [NewjobController::class, 'update'])->name('employer.update');
 

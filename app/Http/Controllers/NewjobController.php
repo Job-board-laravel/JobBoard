@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Newjob;
 use Illuminate\Http\Request;
+use App\Models\Categorie;
 
 class NewjobController extends Controller
 {
@@ -11,29 +12,19 @@ class NewjobController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $jobs = Newjob::all();
-    return view('employer.index', compact('jobs'));
-}
+    {
+        $jobs = Newjob::all();
+        return view('employer.index', compact('jobs'));
+
+        // return view('candidate.index', compact('jobs'));
+
+    }
 
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     // Show the form for creating a new job
-    //     //$job = Newjob::all();
-
-    //     return view('employer.create');
-    // }
     public function create()
     {
-    // Fetch all categories from the database
-    $categories = \App\Models\Categorie::all();
-
-    // Pass categories to the view
-    return view('employer.create', compact('categories'));
+        $categories = Categorie::all();
+        return view('employer.create', compact('categories'));
     }
 
     /**
@@ -112,53 +103,40 @@ class NewjobController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $job_id)
-{
-    // Validate the request data if needed
-    $validatedData = $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'required',
-        'requirement' => 'required',
-        'benefit' => 'required',
-        'location' => 'required|string|max:255',
-        'contact_info' => 'nullable|string|max:255',
-        'logo' => 'nullable|image',
-        'technologies' => 'required|string',
-        'work_type' => 'required|in:remote,onsite,hybrid',
-        'salary_range' => 'nullable|numeric',
-        'application_deadline' => 'required|date',
-        // Add more validation rules as needed
-    ]);
+    {
+        // Validate the request data if needed
+        $data = request()->All();
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required',
+            'requirement' => 'required',
+            'benefit' => 'required',
+            'location' => 'required|string|max:255',
+            'contact_info' => 'nullable|string|max:255',
+            'logo' => 'nullable|image',
+            'technologies' => 'required|string',
+            'work_type' => 'required|in:remote,onsite,hybrid',
+            'salary_range' => 'nullable|numeric',
+            'application_deadline' => 'required|date',
+            // Add more validation rules as needed
+        ]);
 
-    // Find the job by job_id
-    $job = Newjob::where('job_id', $job_id)->firstOrFail();
+        // Find the job by job_id
+        $job = Newjob::where('job_id', $job_id)->first(); // Retrieve or fail if not found
 
-    // Set user_id to a specific value
-    $job->user_id = 1;
-
-    // Handle file upload if a new logo is provided
-    if ($request->hasFile('logo')) {
-        $logoPath = $request->file('logo')->store('images', 'public');
-        $job->logo = $logoPath;
-    }
-
-    // Update job details including user_id
-    $job->title = $request->input('title');
-    $job->description = $request->input('description');
-    $job->requirement = $request->input('requirement');
-    $job->benefit = $request->input('benefit');
-    $job->location = $request->input('location');
-    $job->contact_info = $request->input('contact_info');
-    $job->technologies = $request->input('technologies');
-    $job->work_type = $request->input('work_type');
-    $job->salary_range = $request->input('salary_range');
-    $job->application_deadline = $request->input('application_deadline');
-
-    // Save the updated job
-    $job->save();
-
-    // Redirect or return response
-    return redirect()->route('employer.show', $job_id)->with('success', 'Job updated successfully');
-    }
+        // Set user_id to a specific value (assuming this is necessary)
+        $logoPath = $job->logo;
+        // Handle file upload if a new logo is provided
+        if ($request->hasFile('logo')) {
+            $image = $request->file('logo');
+            $logoPath = $image->store('', 'logo_Employer');
+            $data['logo'] = $logoPath;
+        }
+        // dd($job);
+        $job->update($data);
+        // dd($job);
+        return redirect()->route('employer.show', $job_id)->with('success', 'Job updated successfully');
+        }
     /**
      * Remove the specified resource from storage.
      */

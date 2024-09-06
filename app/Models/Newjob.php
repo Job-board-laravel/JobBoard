@@ -11,29 +11,30 @@ use App\Models\Application;
 class Newjob extends Model
 {
     use HasFactory;
-
-    protected $fillable = [ 
-        'title', 
+    protected $table = 'newjobs';
+    protected $primaryKey = 'job_id';
+    protected $fillable = [
+        'title',
         'description',
          'requirement',
-         'benefit', 
+         'benefit',
         'location',
          'contact_info',
-         'logo', 
+         'logo',
         'technologies',
          'work_type',
          'salary_range',
-         'application_deadline', 
-        'user_id',
+         'application_deadline',
+         'user_id',
          'category_id',
         ];
 
     public function EmployeeCreateJob(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
     public function JobCategory(){
-        return $this->belongsTo(Categorie::class);
+        return $this->belongsTo(Categorie::class, 'category_id', 'category_id');
     }
 
     public function JobApps()

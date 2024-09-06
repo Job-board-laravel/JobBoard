@@ -56,10 +56,10 @@
             <input type="file" class="form-control" id="logo" name="logo">
             @if ($job->logo)
                 <p>Current Logo:</p>
-                <img src="{{ asset('storage/images/' . $job->logo) }}" alt="{{ $job->title }} Logo" style="width: 150px;">
+                <img src="{{ asset('images/LogoEmployers/' . $job->logo) }}" alt="{{ $job->title }} Logo" style="width: 150px;">
             @endif
         </div>
-        
+
         <button type="submit" class="btn btn-primary">Update Job</button>
     </form>
 @endsection

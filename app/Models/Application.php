@@ -20,10 +20,11 @@ class Application extends Model
         // 'resume'
     ];
     public function AppJob(){
-        return $this->belongsTo(Newjob::class);
+        return $this->belongsTo(Newjob::class,'job_id', 'job_id');
     }
 
     public function CandidateFillApp(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class , 'user_id', 'user_id');
     }
+    
 }
