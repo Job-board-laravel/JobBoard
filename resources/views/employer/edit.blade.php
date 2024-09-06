@@ -1,4 +1,4 @@
-@extends('layout.body')
+@extends('layouts.app')
 
 @section('content')
     <h1>Edit Job</h1>

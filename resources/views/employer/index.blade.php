@@ -1,4 +1,4 @@
-@extends('layout.body')
+@extends('layouts.app')
 
 @section('content')
     <h1>All Jobs</h1>
@@ -28,7 +28,7 @@
                     <td>{{ $job->work_type }}</td>
                     <td>
                         @if ($job->logo)
-                            <img src="{{ asset('images/LogoEmployers/'.$job->logo)}}" alt="{{ $job->title }} Logo" style="width:100px;">
+                            <img class="imgEmp"src="{{ asset('images/LogoEmployers/'.$job->logo)}}" alt="{{ $job->title }} Logo" style="width:100px;">
                         @else
                             No Image
                         @endif

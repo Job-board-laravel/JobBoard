@@ -1,4 +1,4 @@
-@extends('layout.body')
+@extends('layouts.app')
 
 @section('content')
     <h1>{{ $job->title }}</h1>
@@ -36,9 +36,8 @@
             <p><strong>Technologies:</strong> {{ $job->technologies }}</p>
             <p><strong>Salary Range:</strong> {{ $job->salary_range }}</p>
 
-            <br><br><br>
+            <br>
             <p><strong>Status:</strong> {{ $job->stutas }}</p>
-
             <p><strong>Category:</strong>
             @if ($job->jobCategory)
                 {{ $job->jobCategory->category_name }}
@@ -49,5 +48,5 @@
         </div>
     </div>
     <a href="{{ route('employer.index') }}" class="btn btn-primary">Back to Jobs</a>
-    
+
 @endsection

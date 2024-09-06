@@ -13,3 +13,7 @@ Route::resource('employer', NewjobController::class);
 Route::resource('candidate', NewjobController::class);
 
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

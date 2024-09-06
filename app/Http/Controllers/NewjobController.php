@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Newjob;
 use Illuminate\Http\Request;
 use App\Models\Categorie;
@@ -11,6 +12,9 @@ class NewjobController extends Controller
     /**
      * Display a listing of the resource.
      */
+    function __construct(){
+        $this->middleware("auth");
+    }
     public function index()
     {
         $jobs = Newjob::all();
