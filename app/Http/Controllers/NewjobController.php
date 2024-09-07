@@ -57,10 +57,9 @@ class NewjobController extends Controller
         } else {
             $imageName = null;
         }
-        $userId = 1;
-        $categoryId = 1 ;
-
-        // Save the job with the image name
+        $userId = Auth::user()->user_id;
+        $categoryId = $request->category_id;
+        
         $ss = Newjob::create(array_merge(
             $request->all(),
             ['logo' => $imageName , 'user_id' => $userId , 'category_id' => $categoryId]
