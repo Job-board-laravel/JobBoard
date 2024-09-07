@@ -17,11 +17,16 @@ class NewjobController extends Controller
     }
     public function index()
     {
+
         $jobs = Newjob::all();
-        return view('employer.index', compact('jobs'));
+        if(Auth::user()->role == "Candidate"){
+            return view('candidate.index', compact('jobs'));
 
-        // return view('candidate.index', compact('jobs'));
+        }else if (Auth::user()->role == "Employer"){
+            return view('employer.index', compact('jobs'));
+        }else{
 
+        }
     }
 
 
@@ -59,7 +64,7 @@ class NewjobController extends Controller
         }
         $userId = Auth::user()->user_id;
         $categoryId = $request->category_id;
-        
+
         $ss = Newjob::create(array_merge(
             $request->all(),
             ['logo' => $imageName , 'user_id' => $userId , 'category_id' => $categoryId]
@@ -86,10 +91,15 @@ class NewjobController extends Controller
     public function show($job_id)
     {
     // Find the job by its job_id, including the related category
-    $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+         if(Auth::user()->role == "Candidate"){
+            $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+            return view('candidate.show', compact('job'));
+         }else{
+            $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+            return view('employer.show', compact('job'));
+         }
 
-    // Pass the job details to the view
-    return view('employer.show', compact('job'));
+
     }
 
 

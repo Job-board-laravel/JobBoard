@@ -16,7 +16,7 @@
                 <div class="col-10">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <a href="#" class="text-decoration-none text-primary fw-bold">{{$job->title}}</a>
+                            <a href="{{route('candidate.show', $job->job_id)}}" class="text-decoration-none text-primary fw-bold">{{$job->title}}</a>
                         </div>
                     </div>
                     <div class="text-muted">

@@ -41,12 +41,18 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         @auth
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('employer.index') }}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('employer.create') }}">Create Job</a>
-                        </li>
+                            @if(Auth::user()->role == 'Candidate')
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{{ route('candidate.index') }}">Home</a>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{{ route('employer.index') }}">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('employer.create') }}">Create Job</a>
+                                </li>
+                            @endif
                         @endauth
 
                     </ul>

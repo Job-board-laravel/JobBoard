@@ -68,12 +68,12 @@
                             <label for="role" class="col-md-4 col-form-label text-md-end">{{ __('role') }}</label>
                             <div class="col-md-6">
                                   <div class="form-check form-check-inline">
-                                    <label class="form-check-label" for="candidate">Candidate</label>
-                                    <input class="form-check-input" type="radio" name="candidate" id="candidate" value="candidate">
+                                    <label class="form-check-label" for="candidate">Candidat</label>
+                                    <input class="form-check-input" type="radio" name="role" id="candidate" value="candidate">
                                   </div>
                                   <div class="form-check form-check-inline">
-                                      <label class="form-check-label" for="employer">Employer</label>
-                                    <input class="form-check-input" type="radio" name="employer" id="employer" value="employer">
+                                    <label class="form-check-label" for="employer">Employer</label>
+                                    <input class="form-check-input" type="radio" name="role" id="employer" value="employer">
                                   </div>
                             </div>
                         </div>
