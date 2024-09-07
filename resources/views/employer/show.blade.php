@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="text-muted">
-                    <span style="font-size: 30px"><a href="#" class="text-decoration-none text-primary fw-bold">{{$job->title}}</a></span>
+                    <span style="font-size: 30px">{{$job->title}}</span>
                     <br><span>{{ $job->location }} ({{$job->work_type}})</span>
                 </div>
             </div>
