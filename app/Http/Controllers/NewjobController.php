@@ -33,7 +33,6 @@ class NewjobController extends Controller
     }
     public function search(Request $request)
     {
-        // Validate and sanitize the input
     $request->validate([
         'search' => 'nullable|string|max:255',
         'minSalary' => 'nullable|numeric',

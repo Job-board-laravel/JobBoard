@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@extends('layouts.sidebar')
+
 <!-- start sreach part -->
         @section('contentCandidate')
         <div class="container-fluid w-100 d-flex">

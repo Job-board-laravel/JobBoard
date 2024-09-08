@@ -26,5 +26,5 @@ Route::get('/candidates', [UserController::class, 'showCandidates'])->name('user
 Route::get('/employers', [UserController::class, 'showEmployers'])->name('users.employers');
 
 
-Route::get('application',[ApplicationController::class,'index']);
+// Route::get('application',ApplicationController::class);
 Route::get('/search',[NewjobController::class,'search'])->name('search');
