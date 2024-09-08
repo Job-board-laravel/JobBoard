@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Categorie;
 use App\Models\Application;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Newjob extends Model
 {
     use HasFactory;
+    use SoftDeletes;
     protected $table = 'newjobs';
     protected $primaryKey = 'job_id';
     protected $fillable = [
@@ -28,6 +31,8 @@ class Newjob extends Model
          'user_id',
          'category_id',
         ];
+
+    protected $dates = ['deleted_at'];
 
     public function EmployeeCreateJob(){
         return $this->belongsTo(User::class, 'user_id', 'user_id');

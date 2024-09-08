@@ -72,17 +72,8 @@ class NewjobController extends Controller
         // dd($ss);
         // dd($request);
         // Redirect back to home
+
         return redirect()->route('employer.index')->with('success', 'Job created successfully');
-
-
-    $userId = 1;
-
-    Newjob::create(array_merge(
-        $request->all(),
-        ['logo' => $imageName, 'user_id' => $userId]
-    ));
-
-    return redirect()->route('employer.index')->with('success', 'Job created successfully');
 }
 
     /**
@@ -153,8 +144,27 @@ class NewjobController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Newjob $newjob)
+    public function destroy($job_id)
     {
-        //
+        // Find the job by its ID
+        $job = Newjob::findOrFail($job_id);
+
+        // Soft delete the job (assuming soft deletes are enabled)
+        $job->delete();
+
+        // Redirect back with a success message
+        return redirect()->route('employer.index')->with('success', 'Job deleted successfully.');
+    }
+
+    public function restore($job_id)
+    {
+        // Find the job by its ID, including soft-deleted jobs
+        $job = Newjob::withTrashed()->findOrFail($job_id);
+
+        // Restore the soft-deleted job
+        $job->restore();
+
+        // Redirect back with a success message
+        return redirect()->route('employer.index')->with('success', 'Job restored successfully.');
     }
 }
