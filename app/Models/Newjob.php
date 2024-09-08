@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Categorie;
 use App\Models\Application;
+use App\Models\Comment;
 
 class Newjob extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'job_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [ 
         'title', 
@@ -26,6 +30,7 @@ class Newjob extends Model
          'application_deadline', 
         'user_id',
          'category_id',
+         'stutas'
         ];
 
     public function EmployeeCreateJob(){
@@ -41,6 +46,14 @@ class Newjob extends Model
         // return $this->hasMany(Comment::class, "user_id");
         return $this->hasMany(Application::class);
 
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    public function getRouteKeyName()
+    {
+        return 'job_id';
     }
 
 }

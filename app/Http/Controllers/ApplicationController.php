@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ApplicationController extends Controller
 {
@@ -61,5 +62,13 @@ class ApplicationController extends Controller
     public function destroy(Application $application)
     {
         //
+    }
+    public function getApplicationsByJobId($jobId)
+    {
+        return DB::table('applications')
+            ->join('users', 'applications.user_id', '=', 'users.user_id')
+            ->select('applications.*', 'users.name as user_name')
+            ->where('applications.job_id', $jobId)
+            ->get();
     }
 }

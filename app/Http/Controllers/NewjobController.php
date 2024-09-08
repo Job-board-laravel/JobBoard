@@ -4,12 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Newjob;
 use Illuminate\Http\Request;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ApplicationController;
 
 class NewjobController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    protected $commentController;
+    protected $applicationController;
+
+    public function __construct(CommentController $commentController, ApplicationController $applicationController)
+    {
+        $this->commentController = $commentController;
+        $this->applicationController = $applicationController;
+        
+    }
     public function index()
     {
         //
@@ -34,9 +45,20 @@ class NewjobController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Newjob $newjob)
+    public function show($id)
     {
         //
+       
+        $job = Newjob::findOrFail($id);
+
+        // Fetch comments with user details
+        $comments = $this->commentController->getCommentsByJobId($id);
+
+        // Fetch applications with user details
+        $applications = $this->applicationController->getApplicationsByJobId($id);
+
+        return view('job.show', compact('job', 'comments', 'applications'));
+        
     }
 
     /**
@@ -53,6 +75,7 @@ class NewjobController extends Controller
     public function update(Request $request, Newjob $newjob)
     {
         //
+        
     }
 
     /**
@@ -62,4 +85,5 @@ class NewjobController extends Controller
     {
         //
     }
+    
 }
