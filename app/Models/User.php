@@ -13,6 +13,9 @@ use App\Models\Comment;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    protected $table = 'users';
+    protected $primaryKey = 'user_id';
+
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +28,7 @@ class User extends Authenticatable
         'password',
         'role',
         'phone',
-        'image'
+        'image',
     ];
 
     public function UserComment()
@@ -48,7 +51,7 @@ class User extends Authenticatable
         return $this->hasMany(Newjob::class);
 
     }
-    
+
     // public function (){}
     /**
      * The attributes that should be hidden for serialization.

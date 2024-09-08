@@ -56,6 +56,22 @@ return [
             'throw' => false,
         ],
 
+        'logo_Employer' =>[
+            'driver' => 'local',
+            'root' => public_path('images/LogoEmployers'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'Users_image' =>[
+            'driver' => 'local',
+            'root' => public_path('images/Users'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
     ],
 
     /*
@@ -69,8 +85,6 @@ return [
     |
     */
 
-    'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
+
 
 ];

@@ -1,4 +1,4 @@
-@extends('layout.body')
+@extends('layouts.app')
 
 @section('content')
     <h1>Create Job</h1>
@@ -52,6 +52,15 @@
         <div class="mb-3">
             <label for="logo" class="form-label">Company Logo</label>
             <input type="file" class="form-control" id="logo" name="logo">
+        </div>
+        <div class="mb-3">
+            <label for="category_id" class="form-label">Category</label>
+            <select class="form-select" id="category_id" name="category_id" required>
+                <option value="">Select Category</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->category_id }}">{{ $category->category_name }}</option>
+                @endforeach
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Create Job</button>
     </form>
