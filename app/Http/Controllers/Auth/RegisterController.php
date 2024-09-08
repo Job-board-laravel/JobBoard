@@ -71,6 +71,13 @@ class RegisterController extends Controller
             // dd($img);
             $path = $img->store('','Users_image');
         }
+        if(!isset($data['role'])){
+            // dd($data);
+            $role = 'Admin';
+            // dd($img);
+            $data['role'] = $role;
+
+        }
         // dd($img);
         $data['image'] = $path;
         $user_ = User::create($data);
