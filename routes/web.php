@@ -1,8 +1,10 @@
 <?php
 use App\Http\Controllers\NewjobController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\UserController;
+
 
 //Route::get('/', [NewjobController::class, 'index'])->name('home');
 
@@ -23,3 +25,7 @@ Route::patch('/employer/{job_id}/restore', [NewjobController::class, 'restore'])
 Route::get('/users/{id}', [UserController::class, 'showUserDetails'])->name('users.show');
 Route::get('/candidates', [UserController::class, 'showCandidates'])->name('users.candidates');
 Route::get('/employers', [UserController::class, 'showEmployers'])->name('users.employers');
+
+
+Route::get('application',[ApplicationController::class,'index']);
+Route::get('/search',[NewjobController::class,'search'])->name('search');
