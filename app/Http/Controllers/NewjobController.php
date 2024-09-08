@@ -41,19 +41,24 @@ class NewjobController extends Controller
         $searchTerm = $request->input('search');
 
         // Return early if no search term is provided
-        if (empty($searchTerm)) {
-            return response()->json(["this no job with this kay"], 200);
-        }
-
-        // Perform the search query
+        // if (empty($searchTerm)) {
+        //     // return response()->json(["this no job with this kay"], 200);
+        //  return view('candidate.index', compact('jobs', 'searchTerm'))->with('worm', 'Job Search not found');
+        // }
+        // // Perform the search query
         $jobs = Newjob::where(function ($query) use ($searchTerm) {
-            $query->where('title', 'like', "%$searchTerm%")
-                ->orWhere('description', 'like', "%$searchTerm%");
+            if (empty($searchTerm)) {
+                // return response()->json(["this no job with this kay"], 200);
+             return redirect()->route('candidate.index', compact('searchTerm'));
+            }
+            $query->whereany(['title','location','description','work_type'], 'like', "%$searchTerm%")
+            // ->orWhere( 'like', "%$searchTerm%")
+            //     ->orWhere('like', "%$searchTerm%")
+            //     ->orWhere(, 'like', "%$searchTerm%")
             // Uncomment if you want to include categories in the search
-            // ->orWhereHas('category', function ($query) use ($searchTerm) {
-            //     $query->where('category_name', 'like', "%$searchTerm%")
-            //           ->orWhere('description', 'like', "%$searchTerm%");
-            // });
+            ->orWhereHas('JobCategory', function ($query) use ($searchTerm) {
+                $query->where('category_name', 'like', "%$searchTerm%");
+            });
         })->get();
 
         // return $jobs;

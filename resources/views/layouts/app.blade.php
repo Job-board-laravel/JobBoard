@@ -48,6 +48,16 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ route('candidate.index') }}">Home</a>
                         </li>
+                        <li>
+                        <!-- <nav class="navbar navbar-light bg-ligth">
+                        <div class="container-fluid">
+                            <form class="d-flex" method="get" action="/search">
+                                <input class="form-control me-2" type="search" name="search" placeholder="Search" value="{{@$searchTerm}}" aria-label="Search">
+                                <button class="btn btn-outline-success"> Search</button>
+                            </form>
+                        </div>
+                    </nav> -->
+                        </li>
                         @else
                         <li class="nav-item">
                             <a class="nav-link active" href="{{ route('employer.index') }}">Home</a>
@@ -59,14 +69,7 @@
                         @endauth
 
                     </ul>
-                    <nav class="navbar navbar-light bg-ligth">
-                        <div class="container-fluid">
-                            <form class="d-flex" method="get" action="/search">
-                                <input class="form-control me-2" type="search" name="search" placeholder="Search" value="{{@$searchTerm}}" aria-label="Search">
-                                <button class="btn btn-outline-success"> Search</button>
-                            </form>
-                        </div>
-                    </nav>
+                   
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">

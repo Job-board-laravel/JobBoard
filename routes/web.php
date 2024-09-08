@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
+
 //Route::get('/', [NewjobController::class, 'index'])->name('home');
 
 Route::get('/', function () {
