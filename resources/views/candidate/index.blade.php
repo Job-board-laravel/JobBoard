@@ -1,32 +1,44 @@
-
 @extends('layouts.app')
+   
+<!-- start sreach part -->
+        @section('contentCandidate')
 
+        <nav class="navbar navbar-light bg-black">
+            <div class="container-fluid">
+                <h1>All Jobs</h1>
+                <form class="d-flex" method="get" action="/search">
+                    @csrf
+                    <input class="form-control me-2" type="search" name="search" placeholder="Search" value="{{@$searchTerm}}" aria-label="Search">
+                    <button class="btn btn-outline-success"> Search</button>
+                </form>
+            </div>
+        </nav>
+        <!-- start sreach part -->
 
-@section('contentCandidate')
+        @foreach ($jobs as $job)
 
-
-@foreach ($jobs as $job)
-
-    <div class="container mt-4">
-        <div class="card shadow-sm p-3 mb-4">
-            <div class="row align-items-center">
-                <div class="col-1">
-                    <img src="{{ asset('images/LogoEmployers/'.$job->logo)}}" alt="Company Logo" class="img-fluid rounded" style="width:auto; height:85px; object-fit:cover;">
-                </div>
-                <div class="col-10">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <a href="#" class="text-decoration-none text-primary fw-bold">{{$job->title}}</a>
-                        </div>
+        <div class="container mt-4">
+            <div class="card shadow-sm p-3 mb-4">
+                <div class="row align-items-center">
+                    <div class="col-1">
+                        <img src="{{ asset('images/LogoEmployers/'.$job->logo)}}" alt="Company Logo" class="img-fluid rounded" style="width:auto; height:85px; object-fit:cover;">
                     </div>
-                    <div class="text-muted">
-                        <span>{{$job->EmployeeCreateJob->name}}</span> <br>
-                        <span>{{ $job->location }} ({{$job->work_type}})</span>
+                    <div class="col-10">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <a href="#" class="text-decoration-none text-primary fw-bold">{{$job->title}}</a>
+                            </div>
+                        </div>
+                        <div class="text-muted">
+                            <span>{{$job->EmployeeCreateJob->name}}</span> <br>
+                            <span>{{ $job->location }} ({{$job->work_type}})</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-@endforeach
+        @endforeach
 
-@endsection
+        @endsection
+
+    

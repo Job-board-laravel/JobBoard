@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Newjob;
@@ -12,7 +13,8 @@ class NewjobController extends Controller
     /**
      * Display a listing of the resource.
      */
-    function __construct(){
+    function __construct()
+    {
         $this->middleware("auth");
     }
 
@@ -26,11 +28,40 @@ class NewjobController extends Controller
     // }
     public function index()
     {
-    $jobs = Newjob::withTrashed()->get(); // Includes soft-deleted jobs
-    return view('employer.index', compact('jobs'));
+        $jobs = Newjob::withTrashed()->get(); // Includes soft-deleted jobs
+        return view('employer.index', compact('jobs'));
+    }
+    public function search(Request $request)
+    {
+        // Validate and sanitize the input
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+        ]);
+
+        $searchTerm = $request->input('search');
+
+        // Return early if no search term is provided
+        if (empty($searchTerm)) {
+            return response()->json(["this no job with this kay"], 200);
+        }
+
+        // Perform the search query
+        $jobs = Newjob::where(function ($query) use ($searchTerm) {
+            $query->where('title', 'like', "%$searchTerm%")
+                ->orWhere('description', 'like', "%$searchTerm%");
+            // Uncomment if you want to include categories in the search
+            // ->orWhereHas('category', function ($query) use ($searchTerm) {
+            //     $query->where('category_name', 'like', "%$searchTerm%")
+            //           ->orWhere('description', 'like', "%$searchTerm%");
+            // });
+        })->get();
+
+        // return $jobs;
+        return view('candidate.index', compact('jobs', 'searchTerm'));
     }
 
-    
+
+
 
 
     public function create()
@@ -44,34 +75,34 @@ class NewjobController extends Controller
      */
     public function store(Request $request)
     {
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'required',
-        'requirement' => 'required',
-        'benefit' => 'required',
-        'location' => 'required|string|max:255',
-        'technologies' => 'required',
-        'work_type' => 'required|in:remote,onsite,hybrid',
-        'salary_range' => 'nullable|numeric',
-        'application_deadline' => 'required|date',
-        'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'category_id' => 'required|exists:categories,category_id',
-    ]);
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required',
+            'requirement' => 'required',
+            'benefit' => 'required',
+            'location' => 'required|string|max:255',
+            'technologies' => 'required',
+            'work_type' => 'required|in:remote,onsite,hybrid',
+            'salary_range' => 'nullable|numeric',
+            'application_deadline' => 'required|date',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'category_id' => 'required|exists:categories,category_id',
+        ]);
 
         // Handle the image upload
         if ($request->hasFile('logo')) {
             $image = request()->file("logo");
-            $imageName = $image->store("",'logo_Employer');
+            $imageName = $image->store("", 'logo_Employer');
         } else {
             $imageName = null;
         }
         $userId = 1;
-        $categoryId = 1 ;
+        $categoryId = 1;
 
         // Save the job with the image name
         $ss = Newjob::create(array_merge(
             $request->all(),
-            ['logo' => $imageName , 'user_id' => $userId , 'category_id' => $categoryId]
+            ['logo' => $imageName, 'user_id' => $userId, 'category_id' => $categoryId]
         ));
         // dd($ss);
         // dd($request);
@@ -79,26 +110,26 @@ class NewjobController extends Controller
         return redirect()->route('employer.index')->with('success', 'Job created successfully');
 
 
-    $userId = 1;
+        $userId = 1;
 
-    Newjob::create(array_merge(
-        $request->all(),
-        ['logo' => $imageName, 'user_id' => $userId]
-    ));
+        Newjob::create(array_merge(
+            $request->all(),
+            ['logo' => $imageName, 'user_id' => $userId]
+        ));
 
-    return redirect()->route('employer.index')->with('success', 'Job created successfully');
-}
+        return redirect()->route('employer.index')->with('success', 'Job created successfully');
+    }
 
     /**
      * Display the specified resource.
      */
     public function show($job_id)
     {
-    // Find the job by its job_id, including the related category
-    $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+        // Find the job by its job_id, including the related category
+        $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
 
-    // Pass the job details to the view
-    return view('employer.show', compact('job'));
+        // Pass the job details to the view
+        return view('employer.show', compact('job'));
     }
 
 
@@ -148,7 +179,7 @@ class NewjobController extends Controller
         $job->update($data);
         // dd($job);
         return redirect()->route('employer.show', $job_id)->with('success', 'Job updated successfully');
-        }
+    }
     /**
      * Remove the specified resource from storage.
      */
