@@ -34,36 +34,46 @@ class NewjobController extends Controller
     public function search(Request $request)
     {
         // Validate and sanitize the input
-        $request->validate([
-            'search' => 'nullable|string|max:255',
-        ]);
-
+    $request->validate([
+        'search' => 'nullable|string|max:255',
+        'minSalary' => 'nullable|numeric',
+        'maxSalary' => 'nullable|numeric',
+        'job_created' => 'nullable|date',
+        'cat' => 'nullable|exists:categories,category_name',
+    ]);
+    $query = Newjob::query();
+    if ($request->has('search')) {
         $searchTerm = $request->input('search');
-
-        // Return early if no search term is provided
-        // if (empty($searchTerm)) {
-        //     // return response()->json(["this no job with this kay"], 200);
-        //  return view('candidate.index', compact('jobs', 'searchTerm'))->with('worm', 'Job Search not found');
-        // }
-        // // Perform the search query
-        $jobs = Newjob::where(function ($query) use ($searchTerm) {
-            if (empty($searchTerm)) {
-                // return response()->json(["this no job with this kay"], 200);
-             return redirect()->route('candidate.index', compact('searchTerm'));
-            }
-            $query->whereany(['title','location','description','work_type'], 'like', "%$searchTerm%")
-            // ->orWhere( 'like', "%$searchTerm%")
-            //     ->orWhere('like', "%$searchTerm%")
-            //     ->orWhere(, 'like', "%$searchTerm%")
-            // Uncomment if you want to include categories in the search
-            ->orWhereHas('JobCategory', function ($query) use ($searchTerm) {
-                $query->where('category_name', 'like', "%$searchTerm%");
-            });
-        })->get();
-
-        // return $jobs;
-        return view('candidate.index', compact('jobs', 'searchTerm'));
+        $query->where(function ($q) use ($searchTerm) {
+            $q->where('title', 'like', "%$searchTerm%")
+              ->orWhere('location', 'like', "%$searchTerm%")
+              ->orWhere('description', 'like', "%$searchTerm%")
+              ->orWhere('work_type', 'like', "%$searchTerm%")
+              ->orWhereHas('JobCategory', function ($q) use ($searchTerm) {
+                  $q->where('category_name', 'like', "%$searchTerm%");
+              });
+        });
     }
+    if ($request->has('cat')) {
+        $category = $request->input('cat');
+        $query->whereHas('JobCategory', function ($q) use ($category) {
+            $q->where('category_name', $category);
+        });
+    }
+    if ($request->has('minSalary') && $request->has('maxSalary')) {
+        $minSalary = $request->input('minSalary');
+        $maxSalary = $request->input('maxSalary');
+        $query->whereBetween('salary_range', [$minSalary, $maxSalary]);
+    }
+    if ($request->has('job_created')) {
+        $jobCreated = $request->input('job_created');
+        $query->whereDate('date_posted', $jobCreated);
+    }
+
+    $jobs = $query->get();
+    $categories = Categorie::all();
+    return view('candidate.index', compact('jobs', 'categories'));
+}
 
 
 
