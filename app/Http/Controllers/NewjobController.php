@@ -7,16 +7,26 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Newjob;
 use Illuminate\Http\Request;
 use App\Models\Categorie;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ApplicationController;
 
 class NewjobController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    function __construct()
+
+    protected $commentController;
+    protected $applicationController;
+
+    public function __construct(CommentController $commentController, ApplicationController $applicationController)
     {
+        $this->commentController = $commentController;
+        $this->applicationController = $applicationController;
         $this->middleware("auth");
+
     }
+
     public function index()
     {
 
@@ -30,7 +40,7 @@ class NewjobController extends Controller
 
         }
     }
-    
+
     public function search(Request $request)
     {
         // Validate and sanitize the input
@@ -124,11 +134,19 @@ class NewjobController extends Controller
          if(Auth::user()->role == "Candidate"){
             $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
             return view('candidate.show', compact('job'));
-         }else{
+         }elseif(Auth::user()->role == "Employer"){
             $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
             return view('employer.show', compact('job'));
-         }
+         }else{
+            $job = Newjob::findOrFail($job_id);
+            // Fetch comments with user details
+            $comments = $this->commentController->getCommentsByJobId($id);
 
+            // Fetch applications with user details
+            $applications = $this->applicationController->getApplicationsByJobId($id);
+
+            return view('job.show', compact('job', 'comments', 'applications'));
+         }
 
     }
 
@@ -206,4 +224,5 @@ class NewjobController extends Controller
         // Redirect back with a success message
         return redirect()->route('employer.index')->with('success', 'Job restored successfully.');
     }
+
 }

@@ -9,13 +9,17 @@ use App\Models\Categorie;
 use App\Models\Application;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\Comment;
 
 class Newjob extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    public $incrementing = true;
     protected $table = 'newjobs';
+    protected $keyType = 'int';
     protected $primaryKey = 'job_id';
+    
     protected $fillable = [
         'title',
         'description',
@@ -30,7 +34,8 @@ class Newjob extends Model
          'application_deadline',
          'user_id',
          'category_id',
-        ];
+         'stutas'
+    ];
 
     protected $dates = ['deleted_at'];
 
@@ -47,6 +52,14 @@ class Newjob extends Model
         // return $this->hasMany(Comment::class, "user_id");
         return $this->hasMany(Application::class);
 
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    public function getRouteKeyName()
+    {
+        return 'job_id';
     }
 
 }
