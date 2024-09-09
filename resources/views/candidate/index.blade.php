@@ -15,6 +15,7 @@
         </div>
         <div class="w-100 m-2 rounded-5">
             <h1 class="title bg-light text-center w-100 rounded-5">Category</h1>
+
             <!-- Add category filters here -->
         </div>
         <div class="w-100 m-2 rounded-5">
