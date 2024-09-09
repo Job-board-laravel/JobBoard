@@ -66,3 +66,5 @@ Route::get('/application/store', [ApplicationController::class, 'store'])->name(
 // Route to handle the form submission
 Route::post('/application/store', [ApplicationController::class, 'store'])->name('application.store');
 Route::resource('application', ApplicationController::class);
+Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+Route::resource('applications', ApplicationController::class);

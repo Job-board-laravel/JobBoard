@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Newjob;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Application extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $table = 'applications';
     protected $primaryKey = 'application_id';
@@ -19,7 +21,8 @@ class Application extends Model
         'status',
         'applied_at',
         'job_id',
-        'user_id'
+        'user_id',
+        'is_deleted',
         // 'resume'
     ];
     public function AppJob()
@@ -31,4 +34,18 @@ class Application extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
+
+
+    // public function scopeActive($query)
+    // {
+    //     return $query->where('is_deleted', false);
+    // }
+
+    // // Scope to get deleted records
+    // public function scopeTrashed($query)
+    // {
+    //     return $query->where('is_deleted', true);
+    // }
+
+
 }

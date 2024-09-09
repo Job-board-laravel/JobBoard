@@ -9,16 +9,48 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
+
 class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+
+     public function __construct()
+    {
+        // $applaction = Application::All();
+        // return view('application.index', compact('applaction'));
+         $this->middleware('auth');
+    }
+
     public function index()
     {
-        $applaction = Application::All();
-        return view('application.index', compact('applaction'));
+        $userId = Auth::id();
+
+        // Fetch applications using raw SQL query
+        $applications = $this->getApplicationsForUser($userId);
+
+        return view('candidate.all_applactions', compact('applications'));
     }
+
+    /**
+     * Get applications for a specific user that are not deleted.
+     *
+     * @param int $userId
+     * @return array
+     */
+    protected function getApplicationsForUser($userId)
+    {
+        return DB::table('applications as a')
+            ->leftJoin('newjobs as j', 'a.job_id', '=', 'j.job_id')
+            ->select('a.*', 'j.title as job_title')
+            ->where('a.user_id', $userId)
+            ->where('a.is_deleted', 0)
+            ->get();
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -110,9 +142,22 @@ class ApplicationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Application $application)
+    public function destroy($id)
     {
-        //
+        try {
+            // Find the application by ID
+            $application = Application::findOrFail($id);
+
+            // Mark the application as deleted
+            $application->is_deleted = true;
+            $application->save();
+
+            // Redirect back to the applications list with a success message
+            return redirect()->route('applications.index')->with('success', 'Application deleted successfully.');
+        } catch (\Exception $e) {
+            // Redirect back with an error message if something goes wrong
+            return redirect()->route('applications.index')->withErrors(['error' => $e->getMessage()]);
+        }
     }
     public function getApplicationsByJobId($jobId)
     {
