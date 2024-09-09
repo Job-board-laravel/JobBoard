@@ -4,8 +4,8 @@ use App\Models\Newjob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewjobController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ApplicationController;
@@ -27,6 +27,7 @@ Route::get('/users/pendingJobs', [NewjobController::class, 'pendingJobs'])->name
 Route::resource('users', NewjobController::class);
 Route::resource('users', UserController::class);
 
+Route::get('candidate/index', [NewjobController::class, 'search']);
 
 
 Auth::routes();
@@ -58,3 +59,10 @@ Route::get('/search',[NewjobController::class,'search'])->name('search');
     Route::get('/job/{id}', [NewjobController::class, 'show'])->name('job.show');
     Route::post('/comments/{job_id}', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+// Route::post('application', [ApplicationController::class, 'create'])->name('application.create');
+// Route to show the application form
+Route::get('/application/{job_id}/createApp', [ApplicationController::class, 'createApp'])->name('application.createApp');
+Route::get('/application/store', [ApplicationController::class, 'store'])->name('application.store');
+// Route to handle the form submission
+Route::post('/application/store', [ApplicationController::class, 'store'])->name('application.store');
+Route::resource('application', ApplicationController::class);
