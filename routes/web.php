@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\NewjobController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApplicationController;
@@ -14,7 +15,7 @@ Route::get('/', function () {
 // routers for page employer
 Route::resource('employer', NewjobController::class);
 Route::resource('candidate', NewjobController::class);
-
+Route::get('candidate/index', [NewjobController::class, 'search']);
 
 
 Auth::routes();
@@ -24,7 +25,10 @@ Route::patch('/employer/{job_id}/restore', [NewjobController::class, 'restore'])
 Route::get('/users/{id}', [UserController::class, 'showUserDetails'])->name('users.show');
 Route::get('/candidates', [UserController::class, 'showCandidates'])->name('users.candidates');
 Route::get('/employers', [UserController::class, 'showEmployers'])->name('users.employers');
-
-
-// Route::get('application',ApplicationController::class);
-Route::get('/search',[NewjobController::class,'search'])->name('search');
+// Route::post('application', [ApplicationController::class, 'create'])->name('application.create');
+// Route to show the application form
+Route::get('/application/{job_id}/create', [ApplicationController::class, 'create'])->name('application.create');
+Route::get('/application/store', [ApplicationController::class, 'store'])->name('application.store');
+// Route to handle the form submission
+Route::post('/application/store', [ApplicationController::class, 'store'])->name('application.store');
+Route::resource('application', ApplicationController::class);

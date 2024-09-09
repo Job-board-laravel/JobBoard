@@ -49,9 +49,7 @@
 </div>
 <div class="crud-footer  d-flex justify-content-around ">
     <a href="{{ route('employer.index') }}" class="btn btn-primary">Back to Jobs</a>
-            <form class="d-flex" method="post" action="{{--route('application.create')--}}">
-                <button class="btn btn-primary"> Apply</button>
-            </form> 
+    <a href="{{ route('application.create', ["job_id"=> $job->job_id] )}}" class="btn btn-primary">apply</a>
 </div>
 
 

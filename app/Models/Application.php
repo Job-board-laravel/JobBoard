@@ -22,12 +22,13 @@ class Application extends Model
         'user_id'
         // 'resume'
     ];
-    public function AppJob(){
-        return $this->belongsTo(Newjob::class,'job_id', 'job_id');
+    public function AppJob()
+    {
+        return $this->belongsTo(Newjob::class, 'job_id', 'job_id');
     }
 
-    public function CandidateFillApp(){
-        return $this->belongsTo(User::class , 'user_id', 'user_id');
+    public function CandidateFillApp()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
-
 }
