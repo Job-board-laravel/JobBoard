@@ -37,7 +37,12 @@ class NewjobController extends Controller
         }else if (Auth::user()->role == "Employer"){
             return view('employer.index', compact('jobs'));
         }else{
-
+            $acceptedJobs = Newjob::where('stutas', 'Approve')
+            ->join('users', 'newjobs.user_id', '=', 'users.user_id')
+            ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
+            ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
+            ->get();
+            return view('users.index', compact('acceptedJobs'));
         }
     }
 
@@ -134,16 +139,18 @@ class NewjobController extends Controller
          if(Auth::user()->role == "Candidate"){
             $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
             return view('candidate.show', compact('job'));
-         }elseif(Auth::user()->role == "Employer"){
-            $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
-            return view('employer.show', compact('job'));
-         }else{
+         }
+        //  elseif(Auth::user()->role == "Employer"){
+        //     $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+        //     return view('employer.show', compact('job'));
+        //  }
+         else{
             $job = Newjob::findOrFail($job_id);
             // Fetch comments with user details
-            $comments = $this->commentController->getCommentsByJobId($id);
+            $comments = $this->commentController->getCommentsByJobId($job_id);
 
             // Fetch applications with user details
-            $applications = $this->applicationController->getApplicationsByJobId($id);
+            $applications = $this->applicationController->getApplicationsByJobId($job_id);
 
             return view('job.show', compact('job', 'comments', 'applications'));
          }
@@ -198,6 +205,32 @@ class NewjobController extends Controller
         // dd($job);
         return redirect()->route('employer.show', $job_id)->with('success', 'Job updated successfully');
     }
+
+    public function rejectedJobs()
+    {
+        // dd(111);
+        $rejectedJobs = Newjob::where('stutas', 'Reject')
+            ->join('users', 'newjobs.user_id', '=', 'users.user_id')
+            ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
+            ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
+            ->get();
+
+        return view('users.rejected', compact('rejectedJobs'));
+    }
+
+    public function pendingJobs()
+    {
+        // dd(111);
+        $pendingJobs = Newjob::where('stutas', 'Pending')
+        ->join('users', 'newjobs.user_id', '=', 'users.user_id')
+        ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
+        ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
+        ->get();
+         return view('users.pendingJobs', compact('pendingJobs'));
+    }
+
+
+
     /**
      * Remove the specified resource from storage.
      */

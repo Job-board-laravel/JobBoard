@@ -28,7 +28,7 @@
                     <td>{{ $job->work_type }}</td>
                     <td>
                         @if ($job->logo)
-                            <img class="imgEmp"src="{{ asset('images/LogoEmployers/'.$job->logo)}}" 
+                            <img class="imgEmp"src="{{ asset('images/LogoEmployers/'.$job->logo)}}"
                             alt="{{ $job->title }} Logo" style="width:100px;">
                         @else
                             No Image
@@ -37,8 +37,8 @@
                     <td>{{ $job->stutas }}</td>
                     <td>
     <!-- Show and Edit Buttons -->
-    <a href="{{ route('employer.show', $job->job_id) }}" class="btn btn-info btn-sm" title="View Job">View</a>
-    <a href="{{ route('employer.edit', $job->job_id) }}" class="btn btn-warning btn-sm">Edit Job</a>
+        <a href="{{ route('employer.show', $job->job_id) }}" class="btn btn-info btn-sm" title="View Job">View</a>
+        <a href="{{ route('employer.edit', $job->job_id) }}" class="btn btn-warning btn-sm">Edit Job</a>
 
     <!-- Check if the job is soft-deleted -->
     @if ($job->trashed())

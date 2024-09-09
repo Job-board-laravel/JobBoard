@@ -10,10 +10,13 @@
             <p><strong>Benefits:</strong> {{ $job->benefit }}</p>
             <p><strong>Location:</strong> {{ $job->location }}</p>
             <p><strong>Contact Info:</strong> {{ $job->contact_info }}</p>
-       {{--    <p><strong>Logo:</strong> <img src="{{ $job->logo }}" alt="Job Logo"></p>--}}  
+       {{--    <p><strong>Logo:</strong> <img src="{{ $job->logo }}" alt="Job Logo"></p>--}}
             <p><strong>Technologies:</strong> {{ $job->technologies }}</p>
             <p><strong>Work Type:</strong> {{ $job->work_type }}</p>
             <p><strong>Salary Range:</strong> {{ $job->salary_range }}</p>
+            <p><strong>Create From:</strong> {{ \Carbon\Carbon::parse($job->created_at)->diffForHumans(['parts' => 3 , 'join' => ', '])
+ }}</p>
+
             <p><strong>Application Deadline:</strong> {{ $job->application_deadline }}</p>
 
             <h2>Comments</h2>
@@ -21,16 +24,18 @@
                 @foreach($comments as $comment)
                 @php
                         $createdAt = DateTime::createFromFormat('Y-m-d H:i:s', $comment->created_at);
+                        $createdAt=\Carbon\Carbon::parse($createdAt)->diffForHumans(['parts' => 3 , 'join' => ', '])
+
                     @endphp
-                    <li>{{ $comment->user_name }} on {{ $createdAt->format('Y-m-d') }}
-                      <p>  {{ $comment->content }} <p> 
-                   {{--   @if( auth()->user()->role === 'Admin')
+                    <li>{{ $comment->user_name }} form {{ $createdAt}}
+                      <p>  {{ $comment->content }} <p>
+                     @if( auth()->user()->role === 'Admin')
                         <form action="{{ route('comments.destroy', $comment->comment_id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
-                    @endif --}}
+                    @endif
                     </li>
                         @endforeach
             </ul>

@@ -33,9 +33,9 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" style="font-size: 2em">
             <div class="container">
-                {{-- <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
-                </a> --}}
+                <a class="navbar-brand" href="{{ url('/') }}">
+                {{-- {{ config('app.name', 'Laravel') }} --}}
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -48,12 +48,28 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" href="{{ route('candidate.index') }}">Home</a>
                                 </li>
-                            @else
+                            @elseif(Auth::user()->role == 'Employer')
                                 <li class="nav-item">
                                     <a class="nav-link active" href="{{ route('employer.index') }}">Home</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('employer.create') }}">Create Job</a>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('users.index') }}">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('users.employers') }}">Employees</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('users.candidates') }}">Candidates</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('users.pendingJobs') }}">Pending Jobs</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('users.rejectedJobs') }}">Rejected Jobs</a>
                                 </li>
                             @endif
 
@@ -92,7 +108,7 @@
                         @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <img src="{{ asset('registerImage/' . Auth::user()->image) }}" class="rounded-circle" width="50" height="50">
+                                <img src="{{ asset('images/Users/' . Auth::user()->image) }}" class="rounded-circle" width="50" height="50">
                                 {{ Auth::user()->name }}
                             </a>
 

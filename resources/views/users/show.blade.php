@@ -15,7 +15,7 @@
                 @if ($user->role == 'Employer')
                     <p><strong>Company:</strong> {{ $user->company_name ?? 'N/A' }}</p>
                 @endif
-                <p><strong>Joined On:</strong> {{ $user->created_at->format('d M Y') }}</p>
+                <p><strong>Joined On:</strong> {{ $user->created_at}}</p>
             </div>
         </div>
 

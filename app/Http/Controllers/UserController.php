@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Newjob;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +18,21 @@ class UserController extends Controller
     }
     public function index()
     {
-        //
+        //'
+        $jobs = Newjob::withTrashed()->get();;
+        if(Auth::user()->role == "Candidate"){
+            return view('candidate.index', compact('jobs'));
+
+        }else if (Auth::user()->role == "Employer"){
+            return view('employer.index', compact('jobs'));
+        }else{
+            $acceptedJobs = Newjob::where('stutas', 'Approve')
+            ->join('users', 'newjobs.user_id', '=', 'users.user_id')
+            ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
+            ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
+            ->get();
+            return view('users.index', compact('acceptedJobs'));
+        }
     }
 
     /**
@@ -43,26 +59,29 @@ class UserController extends Controller
     //     //
     // }
     public function showCandidates()
-{
-    $candidates = User::where('role', 'Candidate')->get();
-    return view('users.candidates', compact('candidates'));
-}
+    {
+        $candidates = User::where('role', 'Candidate')->get();
+        return view('users.candidates', compact('candidates'));
+    }
 
-public function showEmployers()
-{
-    $employers = User::where('role', 'Employer')->get();
-    return view('users.employers', compact('employers'));
-}
+    public function showEmployers()
+    {
+        $employers = User::where('role', 'Employer')->get();
+        return view('users.employers', compact('employers'));
+    }
 
 
     public function showUserDetails($id)
-{
-    // Find the user by their ID
-    $user = User::findOrFail($id);
+    {
+        $user = User::findOrFail($id);
+        return view('users.details', compact('user'));
+    }
 
-    // Pass the user to the view
-    return view('users.details', compact('user'));
-}
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return view('users.show', compact('user'));
+    }
 
     /**
      * Show the form for editing the specified resource.
