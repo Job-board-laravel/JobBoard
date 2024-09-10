@@ -64,7 +64,9 @@ Route::get('/search',[NewjobController::class,'search'])->name('search');
 Route::get('/application/{job_id}/createApp', [ApplicationController::class, 'createApp'])->name('application.createApp');
 Route::get('/application/store', [ApplicationController::class, 'store'])->name('application.store');
 // Route to handle the form submission
+// Route::get('/application/{application}', [ApplicationController::class, 'show'])->name('application.show');
 Route::post('/application/store', [ApplicationController::class, 'store'])->name('application.store');
 Route::resource('application', ApplicationController::class);
-Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
-Route::resource('applications', ApplicationController::class);
+
+// Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+// Route::resource('applications', ApplicationController::class);

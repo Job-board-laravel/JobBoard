@@ -48,6 +48,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" href="{{ route('candidate.index') }}">Home</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{{ route('application.index') }}">My Application</a>
+                                </li>
                             @elseif(Auth::user()->role == 'Employer')
                                 <li class="nav-item">
                                     <a class="nav-link active" href="{{ route('employer.index') }}">Home</a>

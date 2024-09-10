@@ -7,6 +7,7 @@ use App\Models\Newjob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 
 
@@ -27,11 +28,9 @@ class ApplicationController extends Controller
     public function index()
     {
         $userId = Auth::id();
-
-        // Fetch applications using raw SQL query
-        $applications = $this->getApplicationsForUser($userId);
-
-        return view('candidate.all_applactions', compact('applications'));
+        $applications = Application::where('user_id',$userId)->get();
+        // dd($applications);
+        return view('application.index', compact('applications'));
     }
 
     /**
@@ -40,15 +39,6 @@ class ApplicationController extends Controller
      * @param int $userId
      * @return array
      */
-    protected function getApplicationsForUser($userId)
-    {
-        return DB::table('applications as a')
-            ->leftJoin('newjobs as j', 'a.job_id', '=', 'j.job_id')
-            ->select('a.*', 'j.title as job_title')
-            ->where('a.user_id', $userId)
-            ->where('a.is_deleted', 0)
-            ->get();
-    }
 
 
 
@@ -57,12 +47,8 @@ class ApplicationController extends Controller
      */
     public function createApp($job_id)
     {
-        // Retrieve the job using the job_id
         $job = Newjob::findOrFail($job_id);
 
-        // For debugging purposes (optional)
-
-        // Pass the job data to the view
         return view('application.createApp', compact('job'));
     }
 
@@ -85,6 +71,7 @@ class ApplicationController extends Controller
         $user_id = Auth::user()->user_id;
         $data = $request->all();
         $data['user_id'] = $user_id;
+        // dd($data);
         Application::create($data);
         // Redirect with success message
         return redirect()->route('application.index')->with('success', 'Application submitted successfully!');
@@ -121,6 +108,7 @@ class ApplicationController extends Controller
     public function show(Application $application)
     {
         //
+        return view('application.show', compact('application'));
     }
 
     /**

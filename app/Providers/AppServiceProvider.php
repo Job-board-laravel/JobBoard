@@ -3,9 +3,17 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use App\Policies\JobPolicy;
+use App\Models\User;
+use App\Models\Newjob;
+
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected $policies = [
+        Newjob::class => JobPolicy::class,
+    ];
     /**
      * Register any application services.
      */
@@ -20,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        Gate::policy(Newjob::class, JobPolicy::class);
+
     }
 }

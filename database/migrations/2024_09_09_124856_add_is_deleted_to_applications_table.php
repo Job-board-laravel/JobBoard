@@ -9,14 +9,14 @@ class AddIsDeletedToApplicationsTable extends Migration
     public function up()
     {
         Schema::table('applications', function (Blueprint $table) {
-            $table->boolean('is_deleted')->default(false);
+            $table->softDeletes(); // Adds a deleted_at column
         });
     }
 
     public function down()
     {
         Schema::table('applications', function (Blueprint $table) {
-            $table->dropColumn('is_deleted');
+            $table->dropSoftDeletes();
         });
     }
 }

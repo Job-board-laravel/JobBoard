@@ -25,21 +25,16 @@
                     <td>{{ $application->status }}</td>
                     <td>{{ $application->applied_at }}</td>
                     <td>
-                    @foreach($applications as $application)
-    @if($application->job_title)
-        {{ $application->job_title }}
-    @else
-        <em>No Job Found</em>
-    @endif
-@endforeach
+                      {{$application->AppJob->title}}
+
                     </td>
                     <td>
                         <!-- Show Button -->
                         <a href="{{ route('applications.show', $application->application_id) }}" class="btn btn-primary">Show</a>
-                        
+
                         <!-- Edit Button -->
                         <a href="{{ route('applications.edit', $application->application_id) }}" class="btn btn-warning">Edit</a>
-                        
+
                         <!-- Delete Button -->
                         <form action="{{ route('applications.destroy', $application->application_id) }}" method="POST" style="display:inline;">
                             @csrf

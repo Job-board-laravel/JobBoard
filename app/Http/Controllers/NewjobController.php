@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use App\Models\Categorie;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ApplicationController;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\UpdateJopRequest;
+use App\Http\Requests\StoreJopRequest;
 
 class NewjobController extends Controller
 {
@@ -29,12 +32,16 @@ class NewjobController extends Controller
 
     public function index()
     {
-
-        $jobs = Newjob::withTrashed()->get();;
-        if(Auth::user()->role == "Candidate"){
+        $role = Auth::user()->role;
+        if(!$this->authorize('viewAny', [Newjob::class, $role])){
+            abort(402);
+        }
+        if($role == "Candidate"){
+            $jobs = Newjob::where('user_id',Auth::user()->user_id)->get();;
             return view('candidate.index', compact('jobs'));
 
-        }else if (Auth::user()->role == "Employer"){
+        }else if ($role == "Employer"){
+            $jobs = Newjob::withTrashed()->where('user_id',Auth::user()->user_id)->get();;
             return view('employer.index', compact('jobs'));
         }else{
             $acceptedJobs = Newjob::where('stutas', 'Approve')
@@ -96,6 +103,7 @@ class NewjobController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Newjob::class);
         $categories = Categorie::all();
         return view('employer.create', compact('categories'));
     }
@@ -103,23 +111,11 @@ class NewjobController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreJopRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required',
-            'requirement' => 'required',
-            'benefit' => 'required',
-            'location' => 'required|string|max:255',
-            'technologies' => 'required',
-            'work_type' => 'required|in:remote,onsite,hybrid',
-            'salary_range' => 'nullable|numeric',
-            'application_deadline' => 'required|date',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'required|exists:categories,category_id',
-        ]);
 
-        // Handle the image upload
+        $this->authorize('create', Newjob::class);
+
         if ($request->hasFile('logo')) {
             $image = request()->file("logo");
             $imageName = $image->store("", 'logo_Employer');
@@ -133,12 +129,9 @@ class NewjobController extends Controller
             $request->all(),
             ['logo' => $imageName, 'user_id' => $userId, 'category_id' => $categoryId]
         ));
-        // dd($ss);
-        // dd($request);
-        // Redirect back to home
 
         return redirect()->route('employer.index')->with('success', 'Job created successfully');
-}
+    }
 
     /**
      * Display the specified resource.
@@ -150,18 +143,14 @@ class NewjobController extends Controller
             $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
             return view('candidate.show', compact('job'));
          }
-        //  elseif(Auth::user()->role == "Employer"){
-        //     $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
-        //     return view('employer.show', compact('job'));
-        //  }
+         elseif(Auth::user()->role == "Employer"){
+            $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+            return view('employer.show', compact('job'));
+         }
          else{
             $job = Newjob::findOrFail($job_id);
-            // Fetch comments with user details
             $comments = $this->commentController->getCommentsByJobId($job_id);
-
-            // Fetch applications with user details
             $applications = $this->applicationController->getApplicationsByJobId($job_id);
-
             return view('job.show', compact('job', 'comments', 'applications'));
          }
 
@@ -174,38 +163,27 @@ class NewjobController extends Controller
     public function edit($job_id)
     {
         $job = Newjob::where('job_id', $job_id)->firstOrFail();
-        return view('employer.edit', compact('job'));
+        if(!Gate::allows('update', $job)){
+            abort(403);
+        }
+        $categories = Categorie::all();
+
+        return view('employer.edit', compact('job','categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $job_id)
+    public function update(UpdateJopRequest $request, $job_id)
     {
-        // Validate the request data if needed
-        // dd('be fore store ');
-        $data = request()->All();
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required',
-            'requirement' => 'required',
-            'benefit' => 'required',
-            'location' => 'required|string|max:255',
-            'contact_info' => 'nullable|string|max:255',
-            'logo' => 'nullable|image',
-            'technologies' => 'required|string',
-            'work_type' => 'required|in:remote,onsite,hybrid',
-            'salary_range' => 'nullable|numeric',
-            'application_deadline' => 'required|date',
-            // Add more validation rules as needed
-        ]);
 
-        // Find the job by job_id
-        $job = Newjob::where('job_id', $job_id)->first(); // Retrieve or fail if not found
 
-        // Set user_id to a specific value (assuming this is necessary)
+        $job = Newjob::where('job_id', $job_id)->first();
+        if(!Gate::allows('update', $job)){
+            abort(403);
+        }
+
         $logoPath = $job->logo;
-        // Handle file upload if a new logo is provided
         if ($request->hasFile('logo')) {
             $image = $request->file('logo');
             $logoPath = $image->store('', 'logo_Employer');
@@ -219,7 +197,6 @@ class NewjobController extends Controller
 
     public function rejectedJobs()
     {
-        // dd(111);
         $rejectedJobs = Newjob::where('stutas', 'Reject')
             ->join('users', 'newjobs.user_id', '=', 'users.user_id')
             ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
@@ -247,25 +224,15 @@ class NewjobController extends Controller
      */
     public function destroy($job_id)
     {
-        // Find the job by its ID
         $job = Newjob::findOrFail($job_id);
-
-        // Soft delete the job (assuming soft deletes are enabled)
         $job->delete();
-
-        // Redirect back with a success message
         return redirect()->route('employer.index')->with('success', 'Job deleted successfully.');
     }
 
     public function restore($job_id)
     {
-        // Find the job by its ID, including soft-deleted jobs
         $job = Newjob::withTrashed()->findOrFail($job_id);
-
-        // Restore the soft-deleted job
         $job->restore();
-
-        // Redirect back with a success message
         return redirect()->route('employer.index')->with('success', 'Job restored successfully.');
     }
 
