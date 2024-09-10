@@ -68,3 +68,7 @@ Route::post('/application/store', [ApplicationController::class, 'store'])->name
 Route::resource('application', ApplicationController::class);
 Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
 Route::resource('applications', ApplicationController::class);
+
+
+route::get('/applications/{id}/edit', [ApplicationController::class, 'edit'])->name('application.edit');
+Route::put('/applications/{id}', [ApplicationController::class, 'update'])->name('application.update');

@@ -32,6 +32,11 @@ class ApplicationController extends Controller
         $applications = $this->getApplicationsForUser($userId);
 
         return view('candidate.all_applactions', compact('applications'));
+
+    // $applications = Application::all();  // Fetch applications or any data you need
+    // return view('application.index')->with('applications', $applications);
+
+
     }
 
     /**
@@ -126,18 +131,34 @@ class ApplicationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Application $application)
-    {
-        //
-    }
+    public function edit($id)
+{
+    $application = Application::findOrFail($id);
+    return view('application.edit', compact('application'));
+}
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Application $application)
+    public function update(Request $request, $id)
     {
-        //
+        // Validate the request
+        $validated = $request->validate([
+            'status' => 'required|in:Pending,Approved,Rejected',
+        ]);
+    
+        // Find the application by ID
+        $application = Application::findOrFail($id);
+    
+        // Update the application status
+        $application->status = $request->input('status');
+        $application->save();
+    
+        // Redirect back with success message
+        return redirect()->route('application.index')->with('success', 'Application updated successfully');
     }
+    
 
     /**
      * Remove the specified resource from storage.
