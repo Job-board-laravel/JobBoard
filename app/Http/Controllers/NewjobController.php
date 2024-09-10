@@ -29,7 +29,6 @@ class NewjobController extends Controller
         $this->middleware("auth");
 
     }
-
     public function index()
     {
         $role = Auth::user()->role;
@@ -45,11 +44,11 @@ class NewjobController extends Controller
             return view('employer.index', compact('jobs'));
         }else{
             $acceptedJobs = Newjob::where('stutas', 'Approve')
-            ->join('users', 'newjobs.user_id', '=', 'users.user_id')
-            ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
-            ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
-            ->get();
-            return view('users.index', compact('acceptedJobs'));
+                ->join('users', 'newjobs.user_id', '=', 'users.user_id')
+                ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
+                ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
+                ->get();
+            return view('users.index', compact('acceptedJobs', 'categories'));
         }
     }
 

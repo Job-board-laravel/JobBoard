@@ -44,29 +44,27 @@ Route::get('application',[ApplicationController::class,'index']);
 Route::get('/search',[NewjobController::class,'search'])->name('search');
 
 
+Route::put('/jobs/{job}/update-status', function (Request $request, Newjob $job) {
+    $job->update(['stutas' => $request->input('status')]);
+    return redirect()->route('users.pendingJobs')->with('success', 'Job status updated successfully.');
+})->name('update.job.status');
 
-// mohsen
-// Apply auth middleware for all routes requiring authentication
-//Route::middleware(['auth'])->group(function () {
-    // Route::get('users/home', function () {
-    // })->name('home');
+Route::get('/job/{id}', [NewjobController::class, 'show'])->name('job.show');
+Route::post('/comments/{job_id}', [CommentController::class, 'store'])->name('comments.store');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-    Route::put('/jobs/{job}/update-status', function (Request $request, Newjob $job) {
-        $job->update(['stutas' => $request->input('status')]);
-        return redirect()->route('users.pendingJobs')->with('success', 'Job status updated successfully.');
-    })->name('update.job.status');
 
-    Route::get('/job/{id}', [NewjobController::class, 'show'])->name('job.show');
-    Route::post('/comments/{job_id}', [CommentController::class, 'store'])->name('comments.store');
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-// Route::post('application', [ApplicationController::class, 'create'])->name('application.create');
-// Route to show the application form
 Route::get('/application/{job_id}/createApp', [ApplicationController::class, 'createApp'])->name('application.createApp');
 Route::get('/application/store', [ApplicationController::class, 'store'])->name('application.store');
-// Route to handle the form submission
-// Route::get('/application/{application}', [ApplicationController::class, 'show'])->name('application.show');
+
+
 Route::post('/application/store', [ApplicationController::class, 'store'])->name('application.store');
 Route::resource('application', ApplicationController::class);
 
-// Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
-// Route::resource('applications', ApplicationController::class);
+
+Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+Route::resource('applications', ApplicationController::class);
+
+
+route::get('/applications/{id}/edit', [ApplicationController::class, 'edit'])->name('application.edit');
+Route::put('/applications/{id}', [ApplicationController::class, 'update'])->name('application.update');
