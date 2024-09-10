@@ -46,8 +46,9 @@ class NewjobController extends Controller
         }
     }
 
-    public function search(Request $request)
+    public function search(Request $request)    
     {
+       
         $request->validate([
             'search' => 'nullable|string|max:255',
             'minSalary' => 'nullable|numeric',
@@ -68,7 +69,7 @@ class NewjobController extends Controller
                     });
             });
         }
-        if ($request->has('cat')) {
+        if ($request->has('category_name')) {
             $category = $request->input('cat');
             $query->whereHas('JobCategory', function ($q) use ($category) {
                 $q->where('category_name', $category);
@@ -84,7 +85,10 @@ class NewjobController extends Controller
             $query->whereDate('date_posted', $jobCreated);
         }
 
-        $jobs = $query->get();
+        // if(!$query->get()){
+            //     return 'no reslat';
+            // }
+            $jobs = $query->get();
         $categories = Categorie::all();
         // return $jobs;
         return view('candidate.index', compact('jobs', 'categories'));
