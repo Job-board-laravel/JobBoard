@@ -35,9 +35,12 @@ class NewjobController extends Controller
         if(!$this->authorize('viewAny', [Newjob::class, $role])){
             abort(402);
         }
+        // dd(11233);
         if($role == "Candidate"){
-            $jobs = Newjob::where('user_id',Auth::user()->user_id)->get();;
-            return view('candidate.index', compact('jobs'));
+            $jobs = Newjob::get();
+            $categories = Categorie::all();
+            // dd($categories);
+            return view('candidate.index', compact('jobs','categories'));
 
         }else if ($role == "Employer"){
             $jobs = Newjob::withTrashed()->where('user_id',Auth::user()->user_id)->get();;
@@ -183,6 +186,7 @@ class NewjobController extends Controller
         }
 
         $logoPath = $job->logo;
+        $data = $request->all();
         if ($request->hasFile('logo')) {
             $image = $request->file('logo');
             $logoPath = $image->store('', 'logo_Employer');

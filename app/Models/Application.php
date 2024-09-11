@@ -22,8 +22,9 @@ class Application extends Model
         'applied_at',
         'job_id',
         'user_id',
-        'is_deleted',
-        // 'resume'
+        'name',
+        'phone',
+        'email'
     ];
     public function AppJob()
     {

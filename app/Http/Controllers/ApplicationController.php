@@ -61,7 +61,7 @@ class ApplicationController extends Controller
         // dd($request);
         // Validate the request data
         $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|email',
             'phone' => 'required|string|max:15',
             'cover_letter' => 'required|string',
@@ -72,8 +72,10 @@ class ApplicationController extends Controller
         $data = $request->all();
         $data['user_id'] = $user_id;
         // dd($data);
-        Application::create($data);
+        // $ss = Application::create($data);
+        // dd($ss);
         // Redirect with success message
+         Application::create($data);
         return redirect()->route('application.index')->with('success', 'Application submitted successfully!');
     }
 
@@ -127,19 +129,20 @@ class ApplicationController extends Controller
     public function update(Request $request, $id)
     {
         // Validate the request
+        $data = $request->all();
         $validated = $request->validate([
-            'status' => 'required|in:Pending,Approved,Rejected',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|string|max:15',
+            'cover_letter' => 'required|string',
+            // 'job_id' => 'required|exists:newjobs,job_id',
         ]);
-
-        // Find the application by ID
+        // dd('aaa');
         $application = Application::findOrFail($id);
-
-        // Update the application status
-        $application->status = $request->input('status');
-        $application->save();
+        $application->update($data);
 
         // Redirect back with success message
-        return redirect()->route('application.index')->with('success', 'Application updated successfully');
+        return redirect()->route('application.show', $application)->with('success', 'Application updated successfully');
     }
 
 

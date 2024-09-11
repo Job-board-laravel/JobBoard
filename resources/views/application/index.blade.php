@@ -10,10 +10,9 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Cover Letter</th>
-                <th>Status</th>
-                <th>Applied At</th>
                 <th>Job Title</th>
+                <th>Applied At</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -21,12 +20,11 @@
             @forelse($applications as $application)
                 <tr>
                     <td>{{ $application->application_id }}</td>
-                    <td>{{ $application->cover_letter }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>{{ $application->applied_at }}</td>
                     <td>
                         {{$application->AppJob->title}}
                     </td>
+                    <td>{{ $application->applied_at }}</td>
+                    <td>{{ $application->status }}</td>
                     <td>
                         <!-- Show Button -->
                         <a href="{{ route('application.show', $application) }}" class="btn btn-primary">Show</a>
