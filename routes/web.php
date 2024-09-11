@@ -68,3 +68,5 @@ Route::post('/application/store', [ApplicationController::class, 'store'])->name
 Route::resource('application', ApplicationController::class);
 Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
 Route::resource('applications', ApplicationController::class);
+Route::post('/applications/{id}/accept', [ApplicationController::class, 'accept'])->name('applications.accept');
+Route::post('/applications/{id}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');

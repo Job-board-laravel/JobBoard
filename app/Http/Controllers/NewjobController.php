@@ -146,24 +146,25 @@ class NewjobController extends Controller
     public function show($job_id)
     {
     // Find the job by its job_id, including the related category
-         if(Auth::user()->role == "Candidate"){
-            $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
-            return view('candidate.show', compact('job'));
-         }
+        //  if(Auth::user()->role == "Candidate"){
+        //     $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+        //     return view('candidate.show', compact('job'));
+        //  }
         //  elseif(Auth::user()->role == "Employer"){
         //     $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
         //     return view('employer.show', compact('job'));
         //  }
-         else{
+       //  else{
             $job = Newjob::findOrFail($job_id);
             // Fetch comments with user details
             $comments = $this->commentController->getCommentsByJobId($job_id);
 
             // Fetch applications with user details
             $applications = $this->applicationController->getApplicationsByJobId($job_id);
+            $applicationCount = $applications->count(); // Count the number of applicants
 
-            return view('job.show', compact('job', 'comments', 'applications'));
-         }
+            return view('job.show', compact('job', 'comments', 'applications','applicationCount'));
+        // }
 
     }
 
