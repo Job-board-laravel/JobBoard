@@ -1,4 +1,3 @@
-<!-- resources/views/home.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -32,7 +31,7 @@
                 @endforeach
             </tbody>
         </table>
-    {{-- {{ $acceptedJobs->links() }} --}}
+    {{ $acceptedJobs->links() }}
     @else
         <h2>NO job yet</h2>
     @endif

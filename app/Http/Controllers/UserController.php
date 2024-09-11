@@ -19,20 +19,20 @@ class UserController extends Controller
     public function index()
     {
         //'
-        $jobs = Newjob::withTrashed()->get();;
-        if(Auth::user()->role == "Candidate"){
-            return view('candidate.index', compact('jobs'));
+        // $jobs = Newjob::withTrashed()->get();;
+        // if(Auth::user()->role == "Candidate"){
+        //     return view('candidate.index', compact('jobs'));
 
-        }else if (Auth::user()->role == "Employer"){
-            return view('employer.index', compact('jobs'));
-        }else{
-            $acceptedJobs = Newjob::where('stutas', 'Approve')
-            ->join('users', 'newjobs.user_id', '=', 'users.user_id')
-            ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
-            ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
-            ->get();
-            return view('users.index', compact('acceptedJobs'));
-        }
+        // }else if (Auth::user()->role == "Employer"){
+        //     return view('employer.index', compact('jobs'));
+        // }else{
+        //     $acceptedJobs = Newjob::where('stutas', 'Approve')
+        //     ->join('users', 'newjobs.user_id', '=', 'users.user_id')
+        //     ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
+        //     ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
+        //     ->get();
+        //     return view('users.index', compact('acceptedJobs'));
+        // }
     }
 
     /**

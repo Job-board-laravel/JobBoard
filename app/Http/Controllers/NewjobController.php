@@ -48,7 +48,6 @@ class NewjobController extends Controller
             return view('employer.index', compact('jobs'));
         }else{
             $acceptedJobs = Newjob::where('stutas', 'Approve')->paginate(10);
-            dd($acceptedJobs);
             return view('users.index', compact('acceptedJobs'));
         }
     }
