@@ -43,7 +43,7 @@
                             <form action="{{ route('application.destroy', $application->application_id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)">Delete</button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)">cancel</button>
                             </form>
                         @endif
                     </td>
@@ -56,6 +56,7 @@
         </tbody>
     </table>
 </div>
+{{$applications->links()}}
 @endsection
 
 <script>

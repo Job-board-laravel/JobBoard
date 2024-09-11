@@ -44,4 +44,6 @@
         </tbody>
     </table>
 </div>
+{{$pendingJobs->links()}}
+
 @endsection

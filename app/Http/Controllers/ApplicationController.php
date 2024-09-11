@@ -28,7 +28,7 @@ class ApplicationController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $applications = Application::withTrashed()->where('user_id',$userId)->get();
+        $applications = Application::withTrashed()->where('user_id',$userId)->paginate(10);
         // dd($applications);
         return view('application.index', compact('applications'));
     }
@@ -127,6 +127,8 @@ class ApplicationController extends Controller
             return redirect()->route('application.index')->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+
     public function restore($id)
     {
         $application = Application::withTrashed()->where('application_id', $id)->first();
@@ -136,4 +138,14 @@ class ApplicationController extends Controller
         $application->restore();
         return redirect()->route('application.index')->with('success', 'Job restored successfully.');
     }
+
+    public function getApplicationsByJobId($jobId)
+    {
+        return DB::table('applications')
+            ->join('users', 'applications.user_id', '=', 'users.user_id')
+            ->select('applications.*', 'users.name as user_name')
+            ->where('applications.job_id', $jobId)
+            ->get();
+    }
 }
+

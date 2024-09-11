@@ -38,21 +38,18 @@ class NewjobController extends Controller
         // dd(11233);
         if($role == "Candidate"){
             // dd(111);
-            $jobs = Newjob::get();
+            $jobs = Newjob::where('stutas', 'Approve')->paginate(10);
             $categories = Categorie::all();
             // dd($categories);
             return view('candidate.index', compact('jobs','categories'));
 
         }else if ($role == "Employer"){
-            $jobs = Newjob::withTrashed()->where('user_id',Auth::user()->user_id)->get();;
+            $jobs = Newjob::withTrashed()->where('user_id',Auth::user()->user_id)->paginate(10);
             return view('employer.index', compact('jobs'));
         }else{
-            $acceptedJobs = Newjob::where('stutas', 'Approve')
-                ->join('users', 'newjobs.user_id', '=', 'users.user_id')
-                ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
-                ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
-                ->get();
-            return view('users.index', compact('acceptedJobs', 'categories'));
+            $acceptedJobs = Newjob::where('stutas', 'Approve')->paginate(10);
+            dd($acceptedJobs);
+            return view('users.index', compact('acceptedJobs'));
         }
     }
 
@@ -205,7 +202,7 @@ class NewjobController extends Controller
             ->join('users', 'newjobs.user_id', '=', 'users.user_id')
             ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
             ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
-            ->get();
+            ->paginate(10);
 
         return view('users.rejected', compact('rejectedJobs'));
     }
@@ -217,7 +214,7 @@ class NewjobController extends Controller
         ->join('users', 'newjobs.user_id', '=', 'users.user_id')
         ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
         ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
-        ->get();
+        ->paginate(10);
          return view('users.pendingJobs', compact('pendingJobs'));
     }
 

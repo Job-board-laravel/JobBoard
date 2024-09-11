@@ -61,23 +61,23 @@
         <div class="card shadow-sm p-3 mb-4">
             <div class="row g-0 align-items-center">
                 <!-- Company Logo -->
-                <div class="col-md-1">
+                <div class="col-md-1" style="margin: 0% 3% 0% 0%">
                     <img src="{{ asset('images/LogoEmployers/' . $job->logo) }}" alt="Company Logo" class="img-fluid rounded" style="width:85px; height:85px; object-fit:cover;">
                 </div>
 
                 <!-- Job Details -->
-                <div class="col-md-11">
+                <div class="col-md-10" style="margin: 1.5% 0% 0%; ">
                     <div class="d-flex justify-content-between">
                         <!-- Job Title -->
-                        <a href="{{ route('candidate.show', $job->job_id) }}" class="text-decoration-none text-primary fw-bold h4">
+                        <a href="{{ route('candidate.show', $job->job_id) }}" class="text-decoration-none text-primary fw-bold h3">
                             {{ $job->title }}
                         </a>
                         <!-- Job Type (Remote/Onsite/Hybrid) -->
-                        <span class="badge bg-secondary">{{ ucfirst($job->work_type) }}</span>
+                        <span class="badge bg-secondary" style="font-size: 20px;">{{ ucfirst($job->work_type) }}</span>
                     </div>
                     <!-- Employer Name and Location -->
                     <p class="mb-1 text-muted">
-                        <strong>{{ $job->EmployeeCreateJob->name }}</strong> - {{ $job->location }}
+                        <strong> location: {{ $job->EmployeeCreateJob->name }}</strong>  {{ $job->location }}
                     </p>
                     <!-- Salary Range -->
                     @if($job->salary_range)
@@ -86,9 +86,14 @@
                     </p>
                     @endif
                 </div>
+                <h3>Description</h3>
+                <h5>
+                    <li>{{$job->description}}</li>
+                </h5>
             </div>
         </div>
         @endforeach
+        {{$jobs->links()}}
 
         <!-- Pagination Links (if necessary) -->
         {{-- <div class="mt-4">

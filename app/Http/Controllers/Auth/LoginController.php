@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -25,6 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
+
     protected $redirectTo = '/home';
 
     /**
@@ -36,5 +38,17 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
+        // if(Auth::user()->role == 'Candidate'){
+        //     $redirectTo = 'candidate.indes';
+        // }
+    }
+    protected function redirectTo()
+    {
+        if (Auth::check() && Auth::user()->role == 'Candidate') {
+            // dd(1);
+            return route('candidate.index'); // Make sure you have this route set correctly
+        }
+
+        return '/home';
     }
 }

@@ -27,18 +27,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $jobs = Newjob::withTrashed()->get();;
         if(Auth::user()->role == "Candidate"){
-            return view('candidate.index', compact('jobs'));
-
+            $jobs = Newjob::where('stutas', 'Approve')->paginate(10);
+            $categories = Categorie::all();
+            // dd($categories);
+            return view('candidate.index', compact('jobs','categories'));
         }else if (Auth::user()->role == "Employer"){
+            $jobs = Newjob::withTrashed()->where('user_id',Auth::user()->user_id)->paginate(10);
             return view('employer.index', compact('jobs'));
         }else{
-            $acceptedJobs = Newjob::where('stutas', 'Approve')
-            ->join('users', 'newjobs.user_id', '=', 'users.user_id')
-            ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
-            ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
-            ->get();
+            $acceptedJobs = Newjob::where('stutas', 'Approve')->paginate(10);
             return view('users.index', compact('acceptedJobs'));
         }
         // return view('home');

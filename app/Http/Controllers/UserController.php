@@ -60,13 +60,13 @@ class UserController extends Controller
     // }
     public function showCandidates()
     {
-        $candidates = User::where('role', 'Candidate')->get();
+        $candidates = User::where('role', 'Candidate')->paginate(10);
         return view('users.candidates', compact('candidates'));
     }
 
     public function showEmployers()
     {
-        $employers = User::where('role', 'Employer')->get();
+        $employers = User::where('role', 'Employer')->paginate(10);
         return view('users.employers', compact('employers'));
     }
 

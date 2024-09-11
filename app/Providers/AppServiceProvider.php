@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Policies\JobPolicy;
 use App\Models\User;
 use App\Models\Newjob;
-
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
         //
         Gate::policy(Newjob::class, JobPolicy::class);
 
+        Paginator::useBootstrapFive();
     }
 }

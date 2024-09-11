@@ -24,10 +24,11 @@
                 <td>{{ $job->salary_range }}</td>
                 <td>{{ $job->user_name }}</td>
                 <td>{{ $job->category_name }}</td>
-               
+
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+{{$rejectedJobs->links()}}
 @endsection

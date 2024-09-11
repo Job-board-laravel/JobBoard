@@ -26,4 +26,5 @@
             </tbody>
         </table>
     </div>
+    {{$employers->links()}}
 @endsection

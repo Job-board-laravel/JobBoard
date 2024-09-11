@@ -34,7 +34,6 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" style="font-size: 2em">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                {{-- {{ config('app.name', 'Laravel') }} --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -76,16 +75,6 @@
                                 </li>
                             @endif
 
-                                    {{-- <li>
-                                    <!-- <nav class="navbar navbar-light bg-ligth">
-                                    <div class="container-fluid">
-                                        <form class="d-flex" method="get" action="/search">
-                                            <input class="form-control me-2" type="search" name="search" placeholder="Search" value="{{@$searchTerm}}" aria-label="Search">
-                                            <button class="btn btn-outline-success"> Search</button>
-                                        </form>
-                                    </div>
-                                </nav> -->
-                                    </li> --}}
 
                         @endauth
 
@@ -141,27 +130,5 @@
             @yield('contentCandidate')
         </div>
     </div>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 
 </body>
-
-{{-- mohsen  --}}
-
-{{-- </html>
-<!-- resources/views/layouts/app.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Job Board')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    @include('layouts.header')
-    <div class="container mt-4">
-        @yield('content')
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html> --}}

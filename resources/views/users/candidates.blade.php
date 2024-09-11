@@ -26,4 +26,6 @@
             </tbody>
         </table>
     </div>
+    {{$candidates->links()}}
+
 @endsection
