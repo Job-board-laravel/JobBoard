@@ -55,16 +55,12 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 
 
 Route::get('/application/{job_id}/createApp', [ApplicationController::class, 'createApp'])->name('application.createApp');
-Route::get('/application/store', [ApplicationController::class, 'store'])->name('application.store');
 
 
 Route::post('/application/store', [ApplicationController::class, 'store'])->name('application.store');
 Route::resource('application', ApplicationController::class);
 
 
-Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
-Route::resource('applications', ApplicationController::class);
+Route::patch('/application/{application_id}/restore', [ApplicationController::class, 'restore'])->name('application.restore');
 
 
-route::get('/applications/{id}/edit', [ApplicationController::class, 'edit'])->name('application.edit');
-Route::put('/applications/{id}', [ApplicationController::class, 'update'])->name('application.update');

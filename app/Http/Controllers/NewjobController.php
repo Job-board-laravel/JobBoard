@@ -37,6 +37,7 @@ class NewjobController extends Controller
         }
         // dd(11233);
         if($role == "Candidate"){
+            // dd(111);
             $jobs = Newjob::get();
             $categories = Categorie::all();
             // dd($categories);
@@ -140,17 +141,17 @@ class NewjobController extends Controller
      */
     public function show($job_id)
     {
-    // Find the job by its job_id, including the related category
-         if(Auth::user()->role == "Candidate"){
-            $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+
+        if(Auth::user()->role == "Candidate"){
+            $job = Newjob::withTrashed()->with('jobCategory')->where('job_id', $job_id)->firstOrFail();
             return view('candidate.show', compact('job'));
          }
          elseif(Auth::user()->role == "Employer"){
-            $job = Newjob::with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+            $job = Newjob::withTrashed()->with('jobCategory')->where('job_id', $job_id)->firstOrFail();
             return view('employer.show', compact('job'));
          }
          else{
-            $job = Newjob::findOrFail($job_id);
+            $job = Newjob::withTrashed()->findOrFail($job_id);
             $comments = $this->commentController->getCommentsByJobId($job_id);
             $applications = $this->applicationController->getApplicationsByJobId($job_id);
             return view('job.show', compact('job', 'comments', 'applications'));
@@ -164,7 +165,7 @@ class NewjobController extends Controller
      */
     public function edit($job_id)
     {
-        $job = Newjob::where('job_id', $job_id)->firstOrFail();
+        $job = Newjob::withTrashed()->where('job_id', $job_id)->firstOrFail();
         if(!Gate::allows('update', $job)){
             abort(403);
         }
@@ -227,6 +228,11 @@ class NewjobController extends Controller
      */
     public function destroy($job_id)
     {
+
+        $job = Newjob::where('job_id', $job_id)->first();
+        if(!Gate::allows('delete', $job)){
+            abort(403);
+        }
         $job = Newjob::findOrFail($job_id);
         $job->delete();
         return redirect()->route('employer.index')->with('success', 'Job deleted successfully.');
@@ -234,7 +240,10 @@ class NewjobController extends Controller
 
     public function restore($job_id)
     {
-        $job = Newjob::withTrashed()->findOrFail($job_id);
+        $job = Newjob::withTrashed()->where('job_id', $job_id)->first();
+        if(!Gate::allows('restore', $job)){
+            abort(403);
+        }
         $job->restore();
         return redirect()->route('employer.index')->with('success', 'Job restored successfully.');
     }

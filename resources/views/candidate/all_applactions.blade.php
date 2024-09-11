@@ -30,13 +30,13 @@
                     </td>
                     <td>
                         <!-- Show Button -->
-                        <a href="{{ route('applications.show', $application->application_id) }}" class="btn btn-primary">Show</a>
+                        <a href="{{ route('application.show', $application->application_id) }}" class="btn btn-primary">Show</a>
 
                         <!-- Edit Button -->
-                        <a href="{{ route('applications.edit', $application->application_id) }}" class="btn btn-warning">Edit</a>
+                        <a href="{{ route('application.edit', $application->application_id) }}" class="btn btn-warning">Edit</a>
 
                         <!-- Delete Button -->
-                        <form action="{{ route('applications.destroy', $application->application_id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('application.destroy', $application->application_id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <input type="submit" class="btn btn-danger" value="Delete">

@@ -53,7 +53,9 @@
 </div>
 <div class="crud-footer  d-flex justify-content-around ">
     <a href="{{ route('employer.index') }}" class="btn btn-primary">Back to Jobs</a>
-    <a href="{{ route('application.createApp', ["job_id"=> $job->job_id] )}}" class="btn btn-primary">apply</a>
+    @if(Auth::user()->role == 'Candidate')
+        <a href="{{ route('application.createApp', ["job_id"=> $job->job_id] )}}" class="btn btn-primary">apply</a>
+    @endif
 </div>
 
 

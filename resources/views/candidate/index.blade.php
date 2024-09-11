@@ -48,7 +48,6 @@
     <div class="w-75 ms-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1>Available Jobs</h1>
-
             <!-- Search Form in Main Content -->
             <form method="get" action="/search" class="d-flex">
                 @csrf

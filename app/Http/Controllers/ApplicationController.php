@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\StoreApllicationRequest;
+use App\Http\Requests\UpdateApllicationRequest;
 
 
 
@@ -20,15 +22,13 @@ class ApplicationController extends Controller
 
      public function __construct()
     {
-        // $applaction = Application::All();
-        // return view('application.index', compact('applaction'));
          $this->middleware('auth');
-    }
+     }
 
     public function index()
     {
         $userId = Auth::id();
-        $applications = Application::where('user_id',$userId)->get();
+        $applications = Application::withTrashed()->where('user_id',$userId)->get();
         // dd($applications);
         return view('application.index', compact('applications'));
     }
@@ -47,8 +47,8 @@ class ApplicationController extends Controller
      */
     public function createApp($job_id)
     {
+        $this->authorize('create', Application::class);
         $job = Newjob::findOrFail($job_id);
-
         return view('application.createApp', compact('job'));
     }
 
@@ -56,60 +56,23 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreApllicationRequest $request)
     {
         // dd($request);
-        // Validate the request data
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'required|string|max:15',
-            'cover_letter' => 'required|string',
-            'job_id' => 'required|exists:newjobs,job_id',
-        ]);
-
+        $this->authorize('create', Application::class);
         $user_id = Auth::user()->user_id;
         $data = $request->all();
         $data['user_id'] = $user_id;
         // dd($data);
-        // $ss = Application::create($data);
-        // dd($ss);
-        // Redirect with success message
-         Application::create($data);
+        Application::create($data);
         return redirect()->route('application.index')->with('success', 'Application submitted successfully!');
     }
-
-    // public function submitApplication(Request $request)
-    // {
-    //     // Validate the request
-    //     $validated = $request->validate([
-    //         'full_name' => 'required|string|max:255',
-    //         'email' => 'required|email',
-    //         'phone' => 'required|string|max:15',
-    //         // 'resume' => 'required|file|mimes:pdf|max:2048',
-    //         'cover_letter' => 'required|string',
-    //         'job_id' => 'required|exists:newjobs,job_id',
-    //     ]);
-
-    //     // Handle file upload
-    //     // if ($request->hasFile('resume')) {
-    //     //     $resumePath = $request->file('resume')->store('resumes');
-    //     //     $validated['resume'] = $resumePath;
-    //     // }
-
-    //     // Save the application data
-    //     $request::save();
-    //     // Application::create($validated);
-
-    //     return redirect()->back()->with('success', 'Application submitted successfully!');
-    // }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Application $application)
     {
-        //
+        // $application = Application::where('application_id', $id)->firstOrFail();
+        // if(!Gate::allows('view', $application)){
+        //     abort(403);
+        // }
         return view('application.show', compact('application'));
     }
 
@@ -117,31 +80,33 @@ class ApplicationController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit($id)
-{
-    $application = Application::findOrFail($id);
-    return view('application.edit', compact('application'));
-}
-
+    {
+        $application = Application::where('application_id', $id)->firstOrFail();
+        if(!Gate::allows('update', $application)){
+            abort(403);
+        }
+        $application = Application::findOrFail($id);
+        return view('application.edit', compact('application'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+
+    public function update(UpdateApllicationRequest $request, $id)
     {
         // Validate the request
+        $application = Application::where('application_id', $id)->firstOrFail();
+        if(!Gate::allows('update', $application)){
+            abort(403);
+        }
         $data = $request->all();
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'phone' => 'required|string|max:15',
-            'cover_letter' => 'required|string',
-            // 'job_id' => 'required|exists:newjobs,job_id',
-        ]);
-        // dd('aaa');
+        // dd($data);
         $application = Application::findOrFail($id);
-        $application->update($data);
+        // if(!$applaction){
 
-        // Redirect back with success message
+        // }
+        $application->update($data);
         return redirect()->route('application.show', $application)->with('success', 'Application updated successfully');
     }
 
@@ -154,24 +119,21 @@ class ApplicationController extends Controller
         try {
             // Find the application by ID
             $application = Application::findOrFail($id);
-
-            // Mark the application as deleted
-            $application->is_deleted = true;
-            $application->save();
-
-            // Redirect back to the applications list with a success message
-            return redirect()->route('applications.index')->with('success', 'Application deleted successfully.');
-        } catch (\Exception $e) {
+            // dd(11);
+            $application->delete();
+            return redirect()->route('application.index')->with('success', 'Application deleted successfully.');
+        } catch (Exception $e) {
             // Redirect back with an error message if something goes wrong
-            return redirect()->route('applications.index')->withErrors(['error' => $e->getMessage()]);
+            return redirect()->route('application.index')->withErrors(['error' => $e->getMessage()]);
         }
     }
-    public function getApplicationsByJobId($jobId)
+    public function restore($id)
     {
-        return DB::table('applications')
-            ->join('users', 'applications.user_id', '=', 'users.user_id')
-            ->select('applications.*', 'users.name as user_name')
-            ->where('applications.job_id', $jobId)
-            ->get();
+        $application = Application::withTrashed()->where('application_id', $id)->first();
+        if(!Gate::allows('restore', $application)){
+            abort(403);
+        }
+        $application->restore();
+        return redirect()->route('application.index')->with('success', 'Job restored successfully.');
     }
 }
