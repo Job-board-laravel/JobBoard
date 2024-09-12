@@ -18,6 +18,7 @@ Route::get('/', function () {
 
 // routers for page employer
 Route::resource('employer', NewjobController::class);
+Route::get('candidate/index', [NewjobController::class, 'search'])->name('candidate.index');
 Route::resource('candidate', NewjobController::class);
 
 // Define named routes for rejected and pending jobs
@@ -25,9 +26,7 @@ Route::get('/users/rejectedJobs', [NewjobController::class, 'rejectedJobs'])->na
 Route::get('/users/pendingJobs', [NewjobController::class, 'pendingJobs'])->name('users.pendingJobs');
 
 Route::resource('users', NewjobController::class);
-// Route::resource('users', UserController::class);
 
-Route::get('candidate/index', [NewjobController::class, 'search']);
 
 
 Auth::routes();

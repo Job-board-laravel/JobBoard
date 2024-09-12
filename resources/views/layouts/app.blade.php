@@ -24,14 +24,29 @@
         tr {
             text-align: center;
         }
+        body, html {
+            height: 100%; /* Ensure the body and html take the full height */
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        /* Optional margin for space above the footer */
+        .content-wrapper {
+            min-height: calc(100vh - 100px); /* Adjust '100px' based on your footer height */
+        }
     </style>
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm" style="font-size: 2em">
+<body  style="background-color:rgb(216,230,230,0,8);" class="min-vh-100 d-flex flex-column">
+    <div id="app" >
+        <nav class="navbar navbar-expand-md navbar shadow-sm border-bottom border-light  rounded-5" style="font-size: 2em">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                 </a>
@@ -74,8 +89,6 @@
                                     <a class="nav-link" href="{{ route('users.rejectedJobs') }}">Rejected Jobs</a>
                                 </li>
                             @endif
-
-
                         @endauth
 
                     </ul>
@@ -122,13 +135,17 @@
             </div>
 
         </nav>
+        </li>
 
-        <div class="container mt-5">
-            @yield('content')
-        </div>
-        <div class="container mt-5">
-            @yield('contentCandidate')
-        </div>
+
     </div>
-
+    <div class="container mt-5" >
+        @yield('content')
+    </div>
+    <div class="h-100" style="">
+        @yield('contentCandidate')
+    </div>
+    </div>
+    @extends('layouts.footer')
 </body>
+</html>

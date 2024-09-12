@@ -37,8 +37,8 @@ class NewjobController extends Controller
         }
         // dd(11233);
         if($role == "Candidate"){
-            // dd(111);
             $jobs = Newjob::where('stutas', 'Approve')->paginate(10);
+            // dd($jobs);
             $categories = Categorie::all();
             // dd($categories);
             return view('candidate.index', compact('jobs','categories'));
@@ -54,6 +54,7 @@ class NewjobController extends Controller
 
     public function search(Request $request)
     {
+
         $request->validate([
             'search' => 'nullable|string|max:255',
             'minSalary' => 'nullable|numeric',
@@ -74,7 +75,7 @@ class NewjobController extends Controller
                     });
             });
         }
-        if ($request->has('cat')) {
+        if ($request->has('category_name')) {
             $category = $request->input('cat');
             $query->whereHas('JobCategory', function ($q) use ($category) {
                 $q->where('category_name', $category);
@@ -90,7 +91,10 @@ class NewjobController extends Controller
             $query->whereDate('date_posted', $jobCreated);
         }
 
-        $jobs = $query->get();
+        // if(!$query->get()){
+            //     return 'no reslat';
+            // }
+        $jobs = $query->paginate(3);
         $categories = Categorie::all();
         // return $jobs;
         return view('candidate.index', compact('jobs', 'categories'));

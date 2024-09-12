@@ -1,104 +1,78 @@
 @extends('layouts.app')
 
 @section('contentCandidate')
-<div class="container-fluid d-flex">
-    <!-- Sidebar for search filters -->
-    <aside class="bg-light p-3 w-25 rounded shadow-sm">
-        <h2 class="text-center mb-4">Search Filters</h2>
 
-        <!-- Search Form -->
-        <form method="get" action="/search" class="mb-4">
-            @csrf
-            <div class="mb-3">
-                <input type="search" name="search" class="form-control" placeholder="Search by title or location" value="{{ @$searchTerm }}">
+    <div class="container-fluid w-100 d-flex col-4">
+        <!-- Sidebar for search filters -->
+        <div class="navbar navbar-light w-25  h-100  ">
+            <!-- <h1 class="bg-light text-center w-100 card-header rounded-5">Search</h1> position-absolute top-0 start-0-->
+
+
+            <div class="w-100 m-1 rounded-5">
+                <h1 class="title w-100 rounded-5">Category</h1>
+                <select class="form-select" name="category_name" aria-label="select Category">
+                    <option disabled selected>select Category</option>
+                    @foreach ($categories as $category )
+                    <option value="{{$category->category_name}}">{{$category->category_name}}</option>
+                    @endforeach
+                </select>
             </div>
-            <button class="btn btn-primary w-100" type="submit">Search</button>
-        </form>
-
-        <!-- Category Filter -->
-        <div class="mb-4">
-            <h4 class="text-center">Category</h4>
-            <select name="cat" class="form-select">
-                <option value="" selected>Select Category</option>
-                @foreach($categories as $category)
-                    <option value="{{ $category->category_name }}">{{ $category->category_name }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <!-- Salary Range Filter -->
-        <div class="mb-4">
-            <h4 class="text-center">Salary Range</h4>
-            <div class="mb-2">
-                <input type="number" name="minSalary" class="form-control" placeholder="Min Salary">
+            <div class="w-100 m-2 rounded-5">
+                <h1 class="title  w-100 rounded-5">Salary</h1>
+                <input class="form-control me-2" type="number" name="minSalary" placeholder="Min Salary" value="{{ @$searchTerm }}" aria-label="Minimum Salary">
+                <input class="form-control me-2" type="number" name="maxSalary" placeholder="Max Salary" value="{{ @$searchTerm }}" aria-label="Maximum Salary">
             </div>
-            <div>
-                <input type="number" name="maxSalary" class="form-control" placeholder="Max Salary">
+            <div class="w-100 m-2 rounded-5">
+                <h1 class="title  w-100 rounded-5">Date Posted</h1>
+                <input class="form-control me-2" type="date" name="job_created" placeholder="Date Posted" value="{{ @$searchTerm }}" aria-label="Date Posted">
             </div>
-        </div>
 
-        <!-- Date Posted Filter -->
-        <div class="mb-4">
-            <h4 class="text-center">Date Posted</h4>
-            <input type="date" name="job_created" class="form-control">
-        </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <div class="w-75 ms-3">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1>Available Jobs</h1>
-            <!-- Search Form in Main Content -->
-            <form method="get" action="/search" class="d-flex">
+            <form class="d-flex w-100 m-1 rounded-5 justify-content-end" method="get" action="/search">
                 @csrf
-                <input type="search" name="search" class="form-control me-2" placeholder="Search jobs" value="{{ @$searchTerm }}">
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                <!-- <input class="form-control me-2" type="search" name="search" placeholder="Search" value="{{ @$searchTerm }}" aria-label="Search"> -->
+                <button class="btn btn-outline-success " type="submit">Search</button>
             </form>
         </div>
 
-        <!-- Job Listings -->
-        @foreach ($jobs as $job)
-        <div class="card shadow-sm p-3 mb-4">
-            <div class="row g-0 align-items-center">
-                <!-- Company Logo -->
-                <div class="col-md-1" style="margin: 0% 3% 0% 0%">
-                    <img src="{{ asset('images/LogoEmployers/' . $job->logo) }}" alt="Company Logo" class="img-fluid rounded" style="width:85px; height:85px; object-fit:cover;">
+        <!-- Main content area for job listings position-absolute top-0 end-0 -->
+        <div class="w-75 col-8 mb-5" >
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <h1>All Jobs</h1>
+                    <form class="d-flex" method="get" action="/search">
+                        @csrf
+                        <input class="form-control me-2" type="search" name="search" placeholder="Search" value="{{ @$searchTerm }}" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
                 </div>
+            </nav>
 
-                <!-- Job Details -->
-                <div class="col-md-10" style="margin: 1.5% 0% 0%; ">
-                    <div class="d-flex justify-content-between">
-                        <!-- Job Title -->
-                        <a href="{{ route('candidate.show', $job->job_id) }}" class="text-decoration-none text-primary fw-bold h3">
-                            {{ $job->title }}
-                        </a>
-                        <!-- Job Type (Remote/Onsite/Hybrid) -->
-                        <span class="badge bg-secondary" style="font-size: 20px;">{{ ucfirst($job->work_type) }}</span>
+            @foreach ($jobs as $job)
+                <div class="container mt-4">
+                    <div class="card shadow-sm p-3 mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-1">
+                                <img src="{{ asset('images/LogoEmployers/' . $job->logo) }}" alt="Company Logo"
+                                class="img-fluid rounded" style="width:auto; height:85px; object-fit:cover;">
+                            </div>
+                            <div class="col-10">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <a href="{{ route('candidate.show', $job->job_id) }}" class="text-decoration-none text-primary fw-bold">{{ $job->title }}</a>
+                                    </div>
+                                </div>
+                                <div class="text-muted mt-2">
+                                    <span>{{ $job->EmployeeCreateJob->name }}</span> <br>
+                                    <span>{{ $job->location }} ({{ $job->work_type }})</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Employer Name and Location -->
-                    <p class="mb-1 text-muted">
-                        <strong> location: {{ $job->EmployeeCreateJob->name }}</strong>  {{ $job->location }}
-                    </p>
-                    <!-- Salary Range -->
-                    @if($job->salary_range)
-                    <p class="text-muted">
-                        Salary: ${{ number_format($job->salary_range) }}
-                    </p>
-                    @endif
                 </div>
-                <h3>Description</h3>
-                <h5>
-                    <li>{{$job->description}}</li>
-                </h5>
-            </div>
+            @endforeach
         </div>
-        @endforeach
-        {{$jobs->links()}}
-
-        <!-- Pagination Links (if necessary) -->
-        {{-- <div class="mt-4">
-            {{ $jobs->links() }}
-        </div> --}}
     </div>
-</div>
+
+    {{$jobs->links()}}
+
 @endsection
