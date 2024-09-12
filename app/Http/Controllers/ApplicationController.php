@@ -147,5 +147,23 @@ class ApplicationController extends Controller
             ->where('applications.job_id', $jobId)
             ->get();
     }
+    public function accept($id)
+{
+    $application = Application::findOrFail($id);
+    // Update the application status to accepted
+    $application->status = 'Accepted';
+    $application->save();
+
+    return redirect()->route('job.show', $application->job_id)->with('success', 'Application accepted successfully.');
+}
+public function reject($id)
+{
+    $application = Application::findOrFail($id);
+    // Update the application status to rejected
+    $application->status = 'rejected';
+    $application->save();
+
+    return redirect()->route('job.show',$application->job_id)->with('success', 'Application accepted successfully.');
+}
 }
 

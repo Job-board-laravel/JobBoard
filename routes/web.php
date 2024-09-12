@@ -64,3 +64,6 @@ Route::resource('application', ApplicationController::class);
 Route::patch('/application/{application_id}/restore', [ApplicationController::class, 'restore'])->name('application.restore');
 
 
+Route::resource('application', ApplicationController::class);
+Route::post('/applications/{id}/accept', [ApplicationController::class, 'accept'])->name('applications.accept');
+Route::post('/applications/{id}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');

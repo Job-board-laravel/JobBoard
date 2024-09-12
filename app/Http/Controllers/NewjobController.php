@@ -138,20 +138,22 @@ class NewjobController extends Controller
     public function show($job_id)
     {
 
-        if(Auth::user()->role == "Candidate"){
-            $job = Newjob::withTrashed()->with('jobCategory')->where('job_id', $job_id)->firstOrFail();
-            return view('candidate.show', compact('job'));
-         }
-         elseif(Auth::user()->role == "Employer"){
-            $job = Newjob::withTrashed()->with('jobCategory')->where('job_id', $job_id)->firstOrFail();
-            return view('employer.show', compact('job'));
-         }
-         else{
+        // if(Auth::user()->role == "Candidate"){
+        //     $job = Newjob::withTrashed()->with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+        //     return view('candidate.show', compact('job'));
+        //  }
+        //  elseif(Auth::user()->role == "Employer"){
+        //     $job = Newjob::withTrashed()->with('jobCategory')->where('job_id', $job_id)->firstOrFail();
+        //     return view('job.show', compact('job', ''));
+        //  }
+        //  else{
             $job = Newjob::withTrashed()->findOrFail($job_id);
             $comments = $this->commentController->getCommentsByJobId($job_id);
             $applications = $this->applicationController->getApplicationsByJobId($job_id);
-            return view('job.show', compact('job', 'comments', 'applications'));
-         }
+            $applicationCount = $applications->count(); // Count the number of applicants
+
+            return view('job.show', compact('job', 'comments', 'applications','applicationCount'));
+        // }
 
     }
 

@@ -1,1 +1,1 @@
-@extends('employer.show')
+@extends('job.show')

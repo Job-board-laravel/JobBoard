@@ -33,18 +33,20 @@
                         <a href="{{ route('application.edit', $application) }}" class="btn btn-warning">Edit</a>
 
                         <!-- Delete Button -->
-                        @if ($application->trashed())
-                            <form action="{{ route('application.restore', $application->application_id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn btn-success btn-sm">Restore</button>
-                            </form>
-                        @else
-                            <form action="{{ route('application.destroy', $application->application_id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)">cancel</button>
-                            </form>
+                        @if($application->status != 'Accepted')
+                            @if ($application->trashed())
+                                <form action="{{ route('application.restore', $application->application_id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn btn-success btn-sm">Restore</button>
+                                </form>
+                            @else
+                                <form action="{{ route('application.destroy', $application->application_id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)">cancel</button>
+                                </form>
+                            @endif
                         @endif
                     </td>
                 </tr>
