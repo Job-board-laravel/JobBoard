@@ -14,7 +14,8 @@ class ApplicationPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        // dd(111);
+        return Auth::user()->role === 'Candidate';
     }
 
     /**

@@ -18,21 +18,7 @@ class UserController extends Controller
     }
     public function index()
     {
-        //'
-        // $jobs = Newjob::withTrashed()->get();;
-        // if(Auth::user()->role == "Candidate"){
-        //     return view('candidate.index', compact('jobs'));
 
-        // }else if (Auth::user()->role == "Employer"){
-        //     return view('employer.index', compact('jobs'));
-        // }else{
-        //     $acceptedJobs = Newjob::where('stutas', 'Approve')
-        //     ->join('users', 'newjobs.user_id', '=', 'users.user_id')
-        //     ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
-        //     ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
-        //     ->get();
-        //     return view('users.index', compact('acceptedJobs'));
-        // }
     }
 
     /**
@@ -51,36 +37,50 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(User $user)
-    // {
-    //     //
-    // }
+
     public function showCandidates()
     {
-        $candidates = User::where('role', 'Candidate')->paginate(10);
-        return view('users.candidates', compact('candidates'));
+        if(Auth::user()->role === "Admin"){
+            $candidates = User::where('role', 'Candidate')->paginate(10);
+            return view('users.candidates', compact('candidates'));
+        }
+        else{
+            return view('ErrorPage');
+        }
     }
 
     public function showEmployers()
     {
-        $employers = User::where('role', 'Employer')->paginate(10);
-        return view('users.employers', compact('employers'));
+        if(Auth::user()->role === "Admin"){
+            $employers = User::where('role', 'Employer')->paginate(10);
+            return view('users.employers', compact('employers'));
+        }
+        else{
+            return view('ErrorPage');
+        }
     }
 
 
     public function showUserDetails($id)
     {
-        $user = User::findOrFail($id);
-        return view('users.details', compact('user'));
+        if(Auth::user()->role === "Admin"){
+            $user = User::findOrFail($id);
+            return view('users.details', compact('user'));
+        }
+        else{
+            return view('ErrorPage');
+        }
     }
 
     public function show($id)
     {
-        $user = User::findOrFail($id);
-        return view('users.show', compact('user'));
+        if(Auth::user()->role === "Admin"){
+            $user = User::findOrFail($id);
+            return view('users.show', compact('user'));
+        }
+        else{
+            return view('ErrorPage');
+        }
     }
 
     /**

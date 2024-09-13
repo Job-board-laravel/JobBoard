@@ -28,7 +28,7 @@ class StoreJopRequest extends FormRequest
                 'benefit' => 'required',
                 'location' => 'required|string|max:255',
                 'contact_info' => 'nullable|string|max:255',
-                'logo' => 'nullable|image',
+                'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'technologies' => 'required|string',
                 'work_type' => 'required|in:remote,onsite,hybrid',
                 'salary_range' => 'nullable|numeric',

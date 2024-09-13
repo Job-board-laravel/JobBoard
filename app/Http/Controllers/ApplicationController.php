@@ -28,6 +28,10 @@ class ApplicationController extends Controller
     public function index()
     {
         $userId = Auth::id();
+        if(!$this->authorize('viewAny', [Application::class])){
+            return view('ErrorPage');
+
+        }
         $applications = Application::withTrashed()->where('user_id',$userId)->paginate(10);
         // dd($applications);
         return view('application.index', compact('applications'));
@@ -47,7 +51,10 @@ class ApplicationController extends Controller
      */
     public function createApp($job_id)
     {
-        $this->authorize('create', Application::class);
+        if($this->authorize('create', Application::class)){
+            return view('ErrorPage');
+
+        }
         $job = Newjob::findOrFail($job_id);
         return view('application.createApp', compact('job'));
     }
@@ -59,7 +66,10 @@ class ApplicationController extends Controller
     public function store(StoreApllicationRequest $request)
     {
         // dd($request);
-        $this->authorize('create', Application::class);
+        if($this->authorize('create', Application::class)){
+            return view('ErrorPage');
+
+        }
         $user_id = Auth::user()->user_id;
         $data = $request->all();
         $data['user_id'] = $user_id;
@@ -69,10 +79,6 @@ class ApplicationController extends Controller
     }
     public function show(Application $application)
     {
-        // $application = Application::where('application_id', $id)->firstOrFail();
-        // if(!Gate::allows('view', $application)){
-        //     abort(403);
-        // }
         return view('application.show', compact('application'));
     }
 
@@ -83,7 +89,7 @@ class ApplicationController extends Controller
     {
         $application = Application::where('application_id', $id)->firstOrFail();
         if(!Gate::allows('update', $application)){
-            abort(403);
+            return view('ErrorPage');
         }
         $application = Application::findOrFail($id);
         return view('application.edit', compact('application'));
@@ -98,7 +104,7 @@ class ApplicationController extends Controller
         // Validate the request
         $application = Application::where('application_id', $id)->firstOrFail();
         if(!Gate::allows('update', $application)){
-            abort(403);
+            return view('ErrorPage');
         }
         $data = $request->all();
         // dd($data);
@@ -133,7 +139,7 @@ class ApplicationController extends Controller
     {
         $application = Application::withTrashed()->where('application_id', $id)->first();
         if(!Gate::allows('restore', $application)){
-            abort(403);
+            return view('ErrorPage');
         }
         $application->restore();
         return redirect()->route('application.index')->with('success', 'Job restored successfully.');

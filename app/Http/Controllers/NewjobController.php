@@ -33,7 +33,9 @@ class NewjobController extends Controller
     {
         $role = Auth::user()->role;
         if(!$this->authorize('viewAny', [Newjob::class, $role])){
-            abort(402);
+            // abort(402);
+            return view('ErrorPage');
+
         }
         // dd(11233);
         if($role == "Candidate"){
@@ -169,7 +171,7 @@ class NewjobController extends Controller
     {
         $job = Newjob::withTrashed()->where('job_id', $job_id)->firstOrFail();
         if(!Gate::allows('update', $job)){
-            abort(403);
+            return view('ErrorPage');
         }
         $categories = Categorie::all();
 
@@ -185,7 +187,7 @@ class NewjobController extends Controller
 
         $job = Newjob::where('job_id', $job_id)->first();
         if(!Gate::allows('update', $job)){
-            abort(403);
+            return view('ErrorPage');
         }
 
         $logoPath = $job->logo;
@@ -215,12 +217,17 @@ class NewjobController extends Controller
     public function pendingJobs()
     {
         // dd(111);
-        $pendingJobs = Newjob::where('stutas', 'Pending')
-        ->join('users', 'newjobs.user_id', '=', 'users.user_id')
-        ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
-        ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
-        ->paginate(10);
-         return view('users.pendingJobs', compact('pendingJobs'));
+        if(Auth::user()->role === "Admin"){
+            $pendingJobs = Newjob::where('stutas', 'Pending')
+            ->join('users', 'newjobs.user_id', '=', 'users.user_id')
+            ->join('categories', 'newjobs.category_id', '=', 'categories.category_id')
+            ->select('newjobs.*', 'users.name as user_name', 'categories.category_name as category_name')
+            ->paginate(10);
+             return view('users.pendingJobs', compact('pendingJobs'));
+        }
+        else{
+                return view('ErrorPage');
+        }
     }
 
 
@@ -233,7 +240,7 @@ class NewjobController extends Controller
 
         $job = Newjob::where('job_id', $job_id)->first();
         if(!Gate::allows('delete', $job)){
-            abort(403);
+            return view('ErrorPage');
         }
         $job = Newjob::findOrFail($job_id);
         $job->delete();
@@ -244,7 +251,7 @@ class NewjobController extends Controller
     {
         $job = Newjob::withTrashed()->where('job_id', $job_id)->first();
         if(!Gate::allows('restore', $job)){
-            abort(403);
+            return view('ErrorPage');
         }
         $job->restore();
         return redirect()->route('employer.index')->with('success', 'Job restored successfully.');

@@ -41,7 +41,7 @@ class User extends Authenticatable
     public function UserApp()
     {
         // return $this->hasMany(Comment::class, "user_id");
-        return $this->hasMany(Application::class);
+        return $this->hasMany(Application::class, 'user_id', 'user_id');
 
     }
 

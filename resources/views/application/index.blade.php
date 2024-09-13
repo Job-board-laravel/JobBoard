@@ -4,6 +4,12 @@
 
 @section('content')
 <div class="container">
+
+    @if(session('applied'))
+    <div class="alert alert-danger">
+        {{ session('applied') }}
+    </div>
+    @endif
     <h2>All Applications</h2>
 
     <table class="table table-bordered">
@@ -27,11 +33,12 @@
                     <td>{{ $application->status }}</td>
                     <td>
                         <!-- Show Button -->
-                        <a href="{{ route('application.show', $application) }}" class="btn btn-primary">Show</a>
+                        @if (!$application->trashed())
+                            <a href="{{ route('application.show', $application) }}" class="btn btn-primary">Show</a>
 
                         <!-- Edit Button -->
-                        <a href="{{ route('application.edit', $application) }}" class="btn btn-warning">Edit</a>
-
+                            <a href="{{ route('application.edit', $application) }}" class="btn btn-warning">Edit</a>
+                        @endif
                         <!-- Delete Button -->
                         @if($application->status != 'Accepted')
                             @if ($application->trashed())
