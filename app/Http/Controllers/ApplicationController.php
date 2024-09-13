@@ -51,7 +51,7 @@ class ApplicationController extends Controller
      */
     public function createApp($job_id)
     {
-        if($this->authorize('create', Application::class)){
+        if(!$this->authorize('create', Application::class)){
             return view('ErrorPage');
 
         }
@@ -66,7 +66,7 @@ class ApplicationController extends Controller
     public function store(StoreApllicationRequest $request)
     {
         // dd($request);
-        if($this->authorize('create', Application::class)){
+        if(!$this->authorize('create', Application::class)){
             return view('ErrorPage');
 
         }

@@ -52,6 +52,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:3', 'confirmed'],
+            // 'logo'=>'required|image|mimes:jpeg,png,jpg|max:7048',
         ]);
     }
 
@@ -71,13 +72,13 @@ class RegisterController extends Controller
             // dd($img);
             $path = $img->store('','Users_image');
         }
-        if(!isset($data['role'])){
-            // dd($data);
-            $role = 'Admin';
-            // dd($img);
-            $data['role'] = $role;
+        // if(!isset($data['role'])){
+        //     // dd($data);
+        //     $role = 'Admin';
+        //     // dd($img);
+        //     $data['role'] = $role;
 
-        }
+        // }
         // dd($img);
         $data['image'] = $path;
         $user_ = User::create($data);
