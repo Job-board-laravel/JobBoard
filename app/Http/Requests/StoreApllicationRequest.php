@@ -24,11 +24,10 @@ class StoreApllicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string','min:5','max:255'],
+            'name' => ['required','string','min:5','max:255'],// new AppValidCount
             'email' => 'required|email',
             'phone' => ['required', 'regex:/^\+?[0-9]{10,15}$/'],
             'cover_letter' => 'required|string',
-            'job_application' => ['required', new AppValidCount],
         ];
     }
     public function messages(): array{
@@ -36,7 +35,8 @@ class StoreApllicationRequest extends FormRequest
             "name.required"  => "Please enter your Name and has lehgth 5 or more",
             "email.required" => "Please enter a vilad email!",
             "phone.required" => "Please enter a valid number and only number!",
-            "cover_letter.required" => "Please Enter Cover letter!"
+            "cover_letter.required" => "Please Enter Cover letter!",
+            'job_application.required'=>''
         ];
     }
     /**
@@ -47,12 +47,12 @@ class StoreApllicationRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function failedValidation(Validator $validator)
-    {
-        // Redirect to the desired page with error messages
-        throw new ValidationException($validator, redirect()->route('application.index')
-            ->withErrors($validator)
-            ->withInput()
-            ->with('applied', 'You have already applied for this job.'));
-    }
+    // protected function failedValidation(Validator $validator)
+    // {
+    //     // Redirect to the desired page with error messages
+    //     throw new ValidationException($validator, redirect()->route('application.index')
+    //         ->withErrors($validator)
+    //         ->withInput()
+    //         ->with('applied', 'You have already applied for this job.'));
+    // }
 }

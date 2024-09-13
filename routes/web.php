@@ -39,7 +39,7 @@ Route::get('/candidates', [UserController::class, 'showCandidates'])->name('user
 Route::get('/employers', [UserController::class, 'showEmployers'])->name('users.employers');
 
 
-Route::get('application',[ApplicationController::class,'index']);
+// Route::get('application',[ApplicationController::class,'index']);
 Route::get('/search',[NewjobController::class,'search'])->name('search');
 
 
@@ -56,13 +56,12 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 Route::get('/application/{job_id}/createApp', [ApplicationController::class, 'createApp'])->name('application.createApp');
 
 
-Route::post('/application/store', [ApplicationController::class, 'store'])->name('application.store');
+// Route::post('/application/store', [ApplicationController::class, 'store'])->name('application.store');
 Route::resource('application', ApplicationController::class);
 
 
 Route::patch('/application/{application_id}/restore', [ApplicationController::class, 'restore'])->name('application.restore');
 
 
-Route::resource('application', ApplicationController::class);
 Route::post('/applications/{id}/accept', [ApplicationController::class, 'accept'])->name('applications.accept');
 Route::post('/applications/{id}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');

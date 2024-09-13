@@ -30,6 +30,7 @@ class Application extends Model
     {
         return $this->belongsTo(Newjob::class, 'job_id', 'job_id');
     }
+    
 
     public function CandidateFillApp()
     {

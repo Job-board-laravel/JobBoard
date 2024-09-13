@@ -74,6 +74,9 @@ class ApplicationController extends Controller
         $data = $request->all();
         $data['user_id'] = $user_id;
         // dd($data);
+        if(Auth::user()->UserApp()->where('job_id', $data['job_id'])->count()>0){
+            return redirect()->route('application.index')->with('applied', 'You have already applied for this job.');
+        }
         Application::create($data);
         return redirect()->route('application.index')->with('success', 'Application submitted successfully!');
     }
