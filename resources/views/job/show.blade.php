@@ -76,10 +76,8 @@
                 <div class="card-body">
                     <ul class="list-group">
                         @foreach($applications as $application)
-                            <li class="list-group-item">{{ $application->user_name }} - Status: {{ $application->status }}
-                                @if(auth()->user()->role === 'Employer' && $application->status === 'Applied')
-                                    <a href="{{ route('application.show', $application->application_id) }}" class="text-decoration-none text-info">App</a>
-                                @endif
+                            <li class="list-group-item">User Name: {{ $application->user_name }} <span style="margin: 0px 10px; font-weight: bold"> Status: {{ $application->status }} </span>
+                                <a href="{{ route('application.show', $application->application_id) }}" class="text-decoration-none text-info">Show App</a>
                             </li>
                         @endforeach
                     </ul>

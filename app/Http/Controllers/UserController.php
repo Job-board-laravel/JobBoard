@@ -18,6 +18,8 @@ class UserController extends Controller
     }
     public function index()
     {
+        $acceptedJobs = Newjob::where('stutas', 'Approve')->paginate(10);
+        return view('users.index', compact('acceptedJobs'));
 
     }
 
@@ -65,7 +67,7 @@ class UserController extends Controller
     {
         if(Auth::user()->role === "Admin"){
             $user = User::findOrFail($id);
-            return view('users.details', compact('user'));
+            return view('users.show', compact('user'));
         }
         else{
             return view('ErrorPage');

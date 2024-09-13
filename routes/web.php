@@ -25,7 +25,7 @@ Route::resource('candidate', NewjobController::class);
 Route::get('/users/rejectedJobs', [NewjobController::class, 'rejectedJobs'])->name('users.rejectedJobs');
 Route::get('/users/pendingJobs', [NewjobController::class, 'pendingJobs'])->name('users.pendingJobs');
 
-Route::resource('users', NewjobController::class);
+Route::resource('users', UserController::class);
 
 
 

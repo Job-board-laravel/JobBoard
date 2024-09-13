@@ -3,29 +3,33 @@
 @section('content')
     <div class="container">
         <h1>Candidates List</h1>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($candidates as $candidate)
+        @if($candidates)
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <td>{{ $candidate->name }}</td>
-                        <td>{{ $candidate->email }}</td>
-                        <td>{{ $candidate->phone }}</td>
-                        <td>
-                            <a href="{{ route('users.show', $candidate->user_id) }}" class="btn btn-info">Show</a>
-                        </td>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    {{$candidates->links()}}
+                </thead>
+                <tbody>
+                    @foreach($candidates as $candidate)
+                        <tr>
+                            <td>{{ $candidate->name }}</td>
+                            <td>{{ $candidate->email }}</td>
+                            <td>{{ $candidate->phone }}</td>
+                            <td>
+                                <a href="{{ route('users.show', $candidate->user_id) }}" class="btn btn-info">Show</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        {{$candidates->links()}}
+    @else
+        <h1>NO Candidate User Register Yet</h1>
+    @endif
 
 @endsection
